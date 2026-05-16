@@ -1,0 +1,17 @@
+  getForecasts(): void {
+
+    this.http
+      .get<WeatherForecast[]>('/weatherforecast')
+      .subscribe({
+        next: (result) => {
+
+          console.log(result);
+
+          this.forecasts = result;
+
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+  }
