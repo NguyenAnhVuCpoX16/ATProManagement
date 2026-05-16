@@ -20467,7 +20467,6 @@ input:focus {
 /* Fonts */
 @font-face {
   font-family: "ubuntu-light";
-  src: url(../fonts/Ubuntu/);
   src: url("../fonts/Ubuntu/Ubuntu-Light.eot"); /* IE9 Compat Modes */
   src: url("../fonts/Ubuntu/Ubuntu-Light.woff2") format("woff2"), url("../fonts/Ubuntu/Ubuntu-Light.woff") format("woff"), url("../fonts/Ubuntu/Ubuntu-Light.ttf") format("truetype");
 }
@@ -21408,47 +21407,6 @@ code {
   padding: 0.5rem 1.25rem;
 }
 
-.card-weather {
-  background: #fff;
-}
-.card-weather .card-body {
-  background: #ffffff;
-}
-.card-weather .card-body:first-child {
-  background: url("../../images/samples/weather.svg") no-repeat center;
-  background-size: cover;
-}
-.card-weather .weather-date-location {
-  padding: 0 0 38px;
-}
-.card-weather .weather-data {
-  padding: 0 0 4.75rem;
-}
-.card-weather .weather-data i {
-  font-size: 5.313rem;
-  line-height: 1;
-}
-.card-weather .weakly-weather {
-  background: #fff;
-  overflow-x: auto;
-}
-.card-weather .weakly-weather .weakly-weather-item {
-  flex: 0 0 14.28%;
-  border-right: 1px solid #ebedf2;
-  padding: 1rem;
-  text-align: center;
-}
-.card-weather .weakly-weather .weakly-weather-item i {
-  font-size: 1.2rem;
-}
-.card-weather .weakly-weather .weakly-weather-item:last-child {
-  border-right: 0;
-}
-.card-weather .weakly-weather .weakly-weather-item .symbol {
-  color: #9c9fa6;
-  font-size: 1.875rem;
-  font-weight: 300;
-}
 
 .product-chart-wrapper {
   height: 92%;
@@ -24826,18 +24784,18 @@ dl li {
 /*-------------------------------------------------------------------*/
 /* === Landing screens === */
 /* Auth */
-.auth .login-half-bg {
-  background: url("../../images/auth/login-bg.jpg");
+/* .auth .login-half-bg {
+  background: url("./assets/images/auth/login-bg.jpg");
   background-size: cover;
 }
 .auth .register-half-bg {
-  background: url("../../images/auth/register-bg.jpg");
+  background: url("./assets/images/auth/register-bg.jpg");
   background-size: cover;
 }
 .auth.lock-full-bg {
-  background: url("../../images/auth/lockscreen-bg.jpg");
+  background: url("./assets/images/auth/lockscreen-bg.jpg");
   background-size: cover;
-}
+} */
 .auth .lock-profile-img {
   width: 90px;
   height: 90px;

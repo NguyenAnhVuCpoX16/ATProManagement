@@ -27,6 +27,11 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+            "scripts": [
+              "src/app/pages/Admin/MainLayout/assets/vendors/js/vendor.bundle.base.js",
+              "src/app/pages/Admin/MainLayout/assets/js/off-canvas.js",
+              "src/app/pages/Admin/MainLayout/assets/js/misc.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -76,12 +81,6 @@
           "options": {
             "proxyConfig": "src/proxy.conf.js",
             "port": 61875
-          }
-        },
-        "test": {
-          "builder": "@angular/build:unit-test",
-          "options": {
-            "karmaConfig": "karma.conf.js"
           }
         }
       }
