@@ -1,0 +1,30 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+.button-group {
+  display: inline-flex;
+  overflow: hidden;
+  border: 2px solid #22c55e;
+  background-color: #fff;
+}
+
+.button-group button {
+  border-radius: 0;
+  border-right: 2px solid #22c55e;
+  background-color: #fff;
+  /* color: #151A2D !important; */
+}
+
+.button-group button.btn-last {
+  border-right: none;
+}
+.material-symbols-rounded {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-size: 20px;
+}
+::ng-deep .toolbar{
+  background-color: transparent !important;
+}

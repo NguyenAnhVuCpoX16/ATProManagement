@@ -1,1 +1,24 @@
-<p>toolbar works!</p>
+<mat-toolbar class="toolbar">
+  <span style="font-weight: 500;">{{ title }}</span>
+  <span class="example-spacer"></span>
+ <div class="button-group">
+  <button mat-flat-button class="green-btn">
+    <span class="material-symbols-rounded" (click)="refreshAction?.()">refresh</span>
+  </button>
+
+  <button mat-flat-button class="green-btn" (click)="addAction?.()">
+    <span class="material-symbols-rounded">add</span>
+  </button>
+
+  <button mat-flat-button class="green-btn" [matMenuTriggerFor]="menu" class="btn-last green-btn">
+    <span class="material-symbols-rounded">menu</span>
+  </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item>Download Template Excel</button>
+            <button mat-menu-item>Export to Excel</button>
+            <button mat-menu-item>Export to PDF</button>
+            <button mat-menu-item>Import Excel</button>
+          </mat-menu>
+</div>
+</mat-toolbar>
+<mat-divider></mat-divider>
