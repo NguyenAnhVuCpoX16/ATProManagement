@@ -26132,9 +26132,15 @@ dl li {
 
 .content-wrapper {
   background: #f2edf3;
-  padding: 2.75rem 2.25rem;
+  height: calc(100vh - 70px);
   width: 100%;
   -webkit-flex-grow: 1;
   flex-grow: 1;
+  overflow: auto;
+  padding: 15px;
+}
+app-navbar{
+  display: block;
+  height: 70px;
 }
 /*# sourceMappingURL=maps/style.css.map */
