@@ -23,9 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ATPromanagement.Abstract\ATProManagement.Abstract.csproj" />
     <ProjectReference Include="..\atpromanagement.client\ATProManagement.Client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\ATProManagement.Controller\ATProManagement.Controller.csproj" />
     <ProjectReference Include="..\ATProManagement.Db\ATProManagement.Db.csproj" />
   </ItemGroup>
 

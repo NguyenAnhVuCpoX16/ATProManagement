@@ -1,4 +1,5 @@
-﻿using ATProManagement.Context;
+﻿using ATPromanagement.Base;
+using ATProManagement.Context;
 using ATProManagement.Db;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
 
-namespace ATPromanagement.Base
+namespace ATProManagement.Base
 {
     public class MyServiceBase : IServiceBase
     {

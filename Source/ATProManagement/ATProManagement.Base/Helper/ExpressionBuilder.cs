@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace ATPromanagement.Base
+namespace ATProManagement.Base
 {
     public class ExpressionBuilder
     {

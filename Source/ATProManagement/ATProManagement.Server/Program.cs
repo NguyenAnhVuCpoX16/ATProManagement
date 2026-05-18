@@ -1,18 +1,21 @@
+using ATPromanagement.Abstract;
+using ATProManagement.Abstract;
 using ATProManagement.Context;
 using ATProManagement.Db;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var services = builder.Services;
+var configs = builder.Configuration;
 // Add services to the container.
 
-builder.Services.AddControllers();
+services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddOpenApi();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
-builder.Services.AddCors(options =>
+services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
@@ -23,16 +26,21 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("mysql"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("mysql"))
+        configs.GetConnectionString("mysql"),
+        ServerVersion.AutoDetect(configs.GetConnectionString("mysql"))
     )
 );
-builder.Services.AddScoped<IDbContext>(
+services.AddScoped<IDbContext>(
     x => x.GetRequiredService<AppDbContext>()
 );
-
+var assemblies = AssembliesUtil.GetAspNetAssemblies();
+var aspnetModules = assemblies.GetInstances<IModuleAspNet>();
+foreach (var module in aspnetModules)
+{
+    module.ConfigureServices(services, configs);
+}
 
 var app = builder.Build();
 app.UseCors("AllowAll");

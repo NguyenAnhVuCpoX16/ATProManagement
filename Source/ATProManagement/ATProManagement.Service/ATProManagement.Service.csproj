@@ -8,12 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="RestEase" Version="1.6.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ATProManagement.Context\ATProManagement.Context.csproj" />
-    <ProjectReference Include="..\ATProManagement.Db\ATProManagement.Db.csproj" />
+    <ProjectReference Include="..\ATProManagement.Base\ATProManagement.Base.csproj" />
+    <ProjectReference Include="..\ATProManagement.Core\ATProManagement.Core.csproj" />
   </ItemGroup>
 
 </Project>

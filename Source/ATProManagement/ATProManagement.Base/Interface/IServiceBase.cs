@@ -1,5 +1,5 @@
 ﻿
-namespace ATPromanagement.Base
+namespace ATProManagement.Base
 {
     public interface IServiceBase 
     {
