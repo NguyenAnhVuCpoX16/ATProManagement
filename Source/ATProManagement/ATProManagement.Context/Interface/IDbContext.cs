@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ATProManagement.Context
 {
-    public interface IDbContext
+    public interface IDbContext : IDisposable
     {
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
