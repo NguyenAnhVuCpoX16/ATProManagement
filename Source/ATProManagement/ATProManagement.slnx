@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/ATProManagement.Abstract/">
+    <Project Path="ATProManagement.Context/ATProManagement.Context.csproj" Id="9ac9c73f-b952-41d3-a0c9-73fff778f2c2" />
+    <Project Path="ATProManagement.Db/ATProManagement.Db.csproj" Id="24557327-acfd-4079-b896-59fb56b401ff" />
+  </Folder>
   <Project Path="atpromanagement.client/ATProManagement.Client.esproj">
     <Build />
     <Deploy />

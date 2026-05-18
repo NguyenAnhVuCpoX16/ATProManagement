@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace ATProManagement.Context.Classes
+namespace ATProManagement.Context
 {
     public class Repository<T> : IRepository<T> where T : class
     {
@@ -13,6 +13,11 @@ namespace ATProManagement.Context.Classes
         protected readonly DbContext _db;
 
         protected DbSet<T> DbSet => _db.Set<T>();
+
+        public Repository(DbContext db)
+        {
+            _db = db;
+        }
 
         public IQueryable<T> Query()
         {

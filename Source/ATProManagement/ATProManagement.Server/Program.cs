@@ -1,3 +1,7 @@
+using ATProManagement.Context;
+using ATProManagement.Db;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,6 +22,17 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("mysql"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("mysql"))
+    )
+);
+builder.Services.AddScoped<IDbContext>(
+    x => x.GetRequiredService<AppDbContext>()
+);
+
 
 var app = builder.Build();
 app.UseCors("AllowAll");

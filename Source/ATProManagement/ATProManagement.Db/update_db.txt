@@ -1,0 +1,2 @@
+Add-Migration -Project "ATProManagement.Db" -StartupProject "ATProManagement.WebHost"
+Update-Database -Context AppDbContext -Project "ATProManagement.Db" -StartupProject "ATProManagement.WebHost"
