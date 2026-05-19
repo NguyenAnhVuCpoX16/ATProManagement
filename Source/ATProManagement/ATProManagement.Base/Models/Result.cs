@@ -5,11 +5,8 @@ namespace ATProManagement.Base
     {
         public bool Success { get; set; }
 
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
-        public Result()
-        {
-        }
         public static Result Ok(string mess)
         {
             return new Result { Success = true, Message = mess };
@@ -24,7 +21,7 @@ namespace ATProManagement.Base
             return new Result { Message = error };
         }
 
-        public ValueTuple<bool, string> AsValueTuple() => new(Success, Message);
+        public ValueTuple<bool, string?> AsValueTuple() => new(Success, Message);
 
         public static implicit operator Result(string error)
         {
@@ -45,12 +42,12 @@ namespace ATProManagement.Base
     {
         public bool Success { get; set; }
 
-        public string Message { get; set; }
+        public string? Message { get; set; }
     }
     public class PagedResultsOf<T> : ResultBaseOf<T>
     {
 
-        public IEnumerable<T> Items { get; set; }
+        public IEnumerable<T>? Items { get; set; }
 
         public int TotalCount { get; set; }
 
@@ -69,7 +66,7 @@ namespace ATProManagement.Base
             return new PagedResultsOf<T> { Message = msg };
         }
 
-        public ValueTuple<bool, string, IEnumerable<T>, int> AsValueTuple() => new(Success, Message, Items, TotalCount);
+        public ValueTuple<bool, string?, IEnumerable<T>?, int> AsValueTuple() => new(Success, Message, Items, TotalCount);
 
         public static implicit operator PagedResultsOf<T>(string error)
         {
@@ -83,15 +80,16 @@ namespace ATProManagement.Base
     }
     public class ResultOf<T> : Result
     {
+
+        public T? Item { get; set; }
         public ResultOf() { }
 
-        public ResultOf(bool s, string m, T i)
+        public ResultOf(bool s, string? m, T i)
         {
             Success = s;
             Message = m;
             Item = i;
         }
-        public T Item { get; set; }
 
         public static ResultOf<T> Ok(T item)
         {
@@ -155,7 +153,7 @@ namespace ATProManagement.Base
             return new ResultsOf<T> { Message = msg };
         }
 
-        public ValueTuple<bool, string, IEnumerable<T>> AsValueTuple() => new(Success, Message, Items);
+        public ValueTuple<bool, string?, IEnumerable<T>?> AsValueTuple() => new(Success, Message, Items);
 
         public static implicit operator ResultsOf<T>(string error)
         {

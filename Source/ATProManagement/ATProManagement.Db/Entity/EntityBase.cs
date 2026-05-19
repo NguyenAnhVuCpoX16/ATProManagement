@@ -12,7 +12,7 @@ namespace ATProManagement.Db
         public DateTime TimeCreated { get; set; } = DateTime.Now;
         public DateTime TimeModified { get; set; } = DateTime.Now;
 
-        public string UserCreated { get; set; }
-        public string UserModified { get; set; }
+        public string? UserCreated { get; set; }
+        public string? UserModified { get; set; }
     }
 }

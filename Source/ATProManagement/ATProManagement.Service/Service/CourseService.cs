@@ -23,9 +23,13 @@ namespace ATProManagement.Service
                 try
                 {
                     var item = await db.Repo<EntityCourse>().GetOne(x => x.Guid == guid);
-                    await db.Repo<EntityCourse>().Remove(item, commit: false);
-                    await db.SaveChangesAsync();
-                    return true;
+                    if (item != null)
+                    {
+                        await db.Repo<EntityCourse>().Remove(item, commit: false);
+                        await db.SaveChangesAsync();
+                        return true;
+                    }
+                    return "Không tìm thấy dữ liệu";
                 }
                 catch (Exception ex)
                 {

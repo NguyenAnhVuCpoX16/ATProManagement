@@ -40,7 +40,7 @@ namespace ATProManagement.Base
             {
                 foreach (var validationResult in validationResults)
                 {
-                    //ModelState.AddModelError(validationResult.MemberNames.FirstOrDefault() ?? string.Empty, validationResult.ErrorMessage);
+                    if(!string.IsNullOrWhiteSpace(validationResult.ErrorMessage))
                     errors.Add(validationResult.ErrorMessage);
                 }
 
@@ -52,7 +52,7 @@ namespace ATProManagement.Base
         }
 
 
-        protected async Task<PagedResultsOf<TTEntity>> GetData<TTEntity>(Expression<Func<TTEntity, bool>> baseFilter = null) where TTEntity : EntityBase
+        protected async Task<PagedResultsOf<TTEntity>> GetData<TTEntity>(Expression<Func<TTEntity, bool>>? baseFilter = null) where TTEntity : EntityBase
         {
             try
             {
@@ -87,7 +87,7 @@ namespace ATProManagement.Base
             }
             catch (Exception ex)
             {
-                return new ResultsOf<OptionItem<string>>(false, ex.Message, null);
+                return new ResultsOf<OptionItem<string>>(false, ex.Message, []);
             }
         }
     }

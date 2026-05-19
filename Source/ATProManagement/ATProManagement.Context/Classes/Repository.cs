@@ -8,7 +8,6 @@ namespace ATProManagement.Context
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        protected readonly Func<IDbContext> _dbFactory;
 
         protected readonly DbContext _db;
 
@@ -25,12 +24,12 @@ namespace ATProManagement.Context
         }
 
 
-        public virtual async Task<T> FindAsync(object id)
+        public virtual async Task<T?> FindAsync(object id)
         {
             return await _db.Set<T>().FindAsync(id);
         }
 
-        public virtual IQueryable<T> Query(Expression<Func<T, bool>> filter = null)
+        public virtual IQueryable<T> Query(Expression<Func<T, bool>>? filter = null)
         {
             IQueryable<T> query = _db.Set<T>();
 
@@ -62,7 +61,7 @@ namespace ATProManagement.Context
             throw new NotImplementedException();
         }
 
-        public virtual Task<IList<T>> GetList(Expression<Func<T, bool>> filter)
+        public virtual Task<IList<T>> GetList(Expression<Func<T, bool>>? filter)
         {
             throw new NotImplementedException();
         }
@@ -81,8 +80,10 @@ namespace ATProManagement.Context
             }
         }
 
-        public async Task<T> GetOneEdit(Expression<Func<T, bool>> filter)
+        public async Task<T?> GetOneEdit(Expression<Func<T, bool>>? filter)
         {
+            if (filter == null)
+                return default;
             return await this.DbSet.Where(filter).FirstOrDefaultAsync();
         }
         public virtual async Task Remove(T entity, bool commit = true)
@@ -96,8 +97,10 @@ namespace ATProManagement.Context
             }
         }
 
-        public async Task<T> GetOne(Expression<Func<T, bool>> filter)
+        public async Task<T?> GetOne(Expression<Func<T, bool>>? filter)
         {
+            if (filter == null)
+                return default;
             return await this.Query().Where(filter).FirstOrDefaultAsync();
         }
 
