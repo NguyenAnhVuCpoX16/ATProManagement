@@ -1,0 +1,126 @@
+<app-toolbar title="Dashboard"></app-toolbar>
+<div class="control-section">
+  <div class="e-bigger e-adaptive-demo">
+
+    <!-- MOBILE -->
+    <div *ngIf="isDeskTop" class="e-mobile-layout">
+      <div class="e-mobile-content">
+
+        <ejs-grid
+          #grid
+          id="adaptivebrowser"
+          [dataSource]="dataGrid"
+          enableAdaptiveUI="true"
+          [rowRenderingMode]="rowMode"
+          height="100%"
+
+          allowPaging="true"
+          allowSorting="true"
+          allowFiltering="true"
+
+          [pageSettings]="initialPage"
+          [filterSettings]="filterSettings"
+          [editSettings]="editSettings"
+          [toolbar]="toolbarGrid"
+
+          showColumnChooser="true"
+          showColumnMenu="true"
+
+          [allowExcelExport]="true"
+          [allowPdfExport]="true"
+
+          (actionBegin)="onActionBegin($event)"
+          (actionComplete)="onActionComplete($event)"
+          (toolbarClick)="toolbarClick($event)"
+        >
+          <e-columns>
+
+            <e-column field="name" headerText="Name" width="150"></e-column>
+
+            <e-column field="description" headerText="Description" width="250"></e-column>
+
+            <e-column field="userCreated" headerText="Created By" width="120"></e-column>
+
+            <e-column field="userModified" headerText="Modified By" width="120"></e-column>
+
+            <e-column
+              field="timeCreated"
+              headerText="Created Time"
+              format="dd/MM/yyyy HH:mm"
+              width="180"
+            ></e-column>
+
+            <e-column
+              field="timeModify"
+              headerText="Modified Time"
+              format="dd/MM/yyyy HH:mm"
+              width="180"
+            ></e-column>
+
+          </e-columns>
+        </ejs-grid>
+
+      </div>
+    </div>
+
+    <!-- DESKTOP -->
+    <div *ngIf="!isDeskTop" class="e-default">
+
+      <ejs-grid
+        #grid
+        id="adaptiveDevice"
+        [dataSource]="dataGrid"
+        enableAdaptiveUI="true"
+        [rowRenderingMode]="'Vertical'"
+        height="100%"
+
+        allowPaging="true"
+        allowSorting="true"
+        allowFiltering="true"
+
+        [pageSettings]="initialPage"
+        [filterSettings]="filterSettings"
+        [editSettings]="editSettings"
+        [toolbar]="toolbarGrid"
+
+        showColumnChooser="true"
+        showColumnMenu="true"
+
+        [allowExcelExport]="true"
+        [allowPdfExport]="true"
+
+        (actionBegin)="onActionBegin($event)"
+        (actionComplete)="onActionComplete($event)"
+        (toolbarClick)="toolbarClick($event)"
+      >
+        <e-columns>
+
+          <e-column field="name" headerText="Name" width="150"></e-column>
+
+          <e-column field="description" headerText="Description" width="250"></e-column>
+
+          <e-column field="userCreated" headerText="Created By" width="120"></e-column>
+
+          <e-column field="userModified" headerText="Modified By" width="120"></e-column>
+
+          <e-column
+            field="timeCreated"
+            headerText="Created Time"
+            format="dd/MM/yyyy HH:mm"
+            width="180"
+          ></e-column>
+
+          <e-column
+            field="timeModify"
+            headerText="Modified Time"
+            format="dd/MM/yyyy HH:mm"
+            width="180"
+          ></e-column>
+
+        </e-columns>
+      </ejs-grid>
+
+    </div>
+
+  </div>
+</div>
