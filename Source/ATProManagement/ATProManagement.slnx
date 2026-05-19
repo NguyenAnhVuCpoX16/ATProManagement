@@ -1,18 +1,20 @@
 <Solution>
-  <Folder Name="/ATProManagement.Abstract/">
-    <Project Path="ATPromanagement.Abstract/ATPromanagement.Abstract.csproj" Id="91ed8459-4184-4894-8c83-e0390a1bd737" DisplayName="ATProManagement.Abstract" />
+  <Folder Name="/Abstract/">
+    <Project Path="ATPromanagement.Abstract/ATPromanagement.Abstract.csproj" Id="91ed8459-4184-4894-8c83-e0390a1bd737" />
     <Project Path="ATProManagement.Base/ATProManagement.Base.csproj" Id="67cf6f24-e33b-45a8-a3a8-8c873b38369b" />
     <Project Path="ATProManagement.Context/ATProManagement.Context.csproj" Id="9ac9c73f-b952-41d3-a0c9-73fff778f2c2" />
     <Project Path="ATProManagement.Db/ATProManagement.Db.csproj" Id="24557327-acfd-4079-b896-59fb56b401ff" />
   </Folder>
-  <Folder Name="/ATProManagement.Service/">
+  <Folder Name="/Service/">
     <Project Path="ATProManagement.Controller/ATProManagement.Controller.csproj" Id="e6850c6c-11ed-4566-97e1-0853ede57ee8" />
     <Project Path="ATProManagement.Core/ATProManagement.Core.csproj" Id="ef55fd2f-42ac-43a4-b8e9-8228916cd617" />
     <Project Path="ATProManagement.Service/ATProManagement.Service.csproj" Id="55061782-2550-4f3b-8eca-4277315c438a" />
   </Folder>
+  <Project Path="ATProManagement.Blazor/ATProManagement.Blazor.csproj" Id="c4fe9996-5289-40ea-9b70-1bf130c7bc47" />
   <Project Path="atpromanagement.client/ATProManagement.Client.esproj">
     <Build />
     <Deploy />
   </Project>
   <Project Path="ATProManagement.Server/ATProManagement.WebHost.csproj" />
+  <Project Path="ATProMangement.Blazor/ATProMangement.Blazor.csproj" Id="0fcbe1fe-45fb-4b81-abc9-604d4a52d748" />
 </Solution>

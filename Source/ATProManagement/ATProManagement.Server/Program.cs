@@ -3,6 +3,7 @@ using ATProManagement.Abstract;
 using ATProManagement.Context;
 using ATProManagement.Db;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -13,7 +14,14 @@ services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 services.AddOpenApi();
 services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "ATProManagement",
+        Version = "v1"
+    });
+});
 
 services.AddCors(options =>
 {
@@ -50,7 +58,13 @@ app.MapStaticAssets();
 // Configure the HTTP request pipeline.
 app.MapOpenApi();
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ATProManagement API V1");
+
+    // Hide Schemas
+    c.DefaultModelsExpandDepth(-1);
+});
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
