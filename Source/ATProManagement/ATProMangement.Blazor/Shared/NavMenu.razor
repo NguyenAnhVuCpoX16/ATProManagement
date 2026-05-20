@@ -1,27 +1,43 @@
 ﻿<MudPaper Width="250px" Class="py-3" Elevation="0">
     <MudNavMenu>
-        <MudText Typo="Typo.h6" Class="px-4 text-bold text-center">ATPro</MudText>
-        <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary text-center">Management</MudText>
-        <MudDivider Class="my-2"/>
-        <MudNavLink Href="/#" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
-        <MudNavGroup Title="Education" Icon="@Icons.Material.Filled.PlaylistAddCircle">
-            <MudNavLink Href="/#" Icon="@Icons.Material.Filled.ChecklistRtl">Courses</MudNavLink>
-            <MudNavLink Href="/#" Icon="@Icons.Material.Filled.SupervisedUserCircle">Client</MudNavLink>
+        <MudNavLink Href="/" Icon="@Icons.Material.Filled.Dashboard" IconColor="Color.Surface" Class="text-white">Dashboard</MudNavLink>
+        <MudNavGroup Title="Education" Icon="@Icons.Material.Filled.PlaylistAddCircle" IconColor="Color.Surface" Class="text-white">
+            <MudNavLink Href="/#" Icon="@Icons.Material.Filled.ChecklistRtl" IconColor="Color.Surface" Class="text-white">Courses</MudNavLink>
+            <MudNavLink Href="/#" Icon="@Icons.Material.Filled.SupervisedUserCircle" IconColor="Color.Surface" Class="text-white">Client</MudNavLink>
         </MudNavGroup>
-        <MudNavLink Href="/#" Icon="@Icons.Material.Filled.Interests">Servers</MudNavLink>
-        <MudNavLink Href="/#" Disabled="true" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
-        <MudNavLink Href="/#" Icon="@Icons.Material.Filled.QuestionAnswer">About</MudNavLink>
-        <MudNavLink Href="/#" Icon="@Icons.Material.Filled.Logout">Log out</MudNavLink>
+        <MudNavLink Href="/#" Icon="@Icons.Material.Filled.Interests" IconColor="Color.Surface" Class="text-white">Servers</MudNavLink>
+        <MudNavLink Href="/#" Icon="@Icons.Material.Filled.Settings" IconColor="Color.Surface" Class="text-white">Settings</MudNavLink>
+        <MudNavLink Href="/#" Icon="@Icons.Material.Filled.QuestionAnswer" IconColor="Color.Surface" Class="text-white">About</MudNavLink>
+        <MudNavLink Href="/#" Icon="@Icons.Material.Filled.Logout" IconColor="Color.Surface" Class="text-white">Log out</MudNavLink>
     </MudNavMenu>
 </MudPaper>
 <style>
-    .mud-nav-link, .mud-nav-link-text {
-        display: flex;
-        gap: 20px;
-        margin-left: 0px;
-        margin-inline-start: 0px;
+
+    aside.mud-drawer {
+        height: 100vh !important;
+        background: linear-gradient(180deg,rgba(255, 111, 0, 1) 0%, rgba(255, 244, 140, 1) 100%) !important;
     }
-    .text-bold{
-        font-weight: bold;
+
+    .mud-paper {
+        background: transparent;
     }
+
+    .mud-nav-link .mud-nav-link-expand-icon, 
+    .mud-navmenu.mud-navmenu-default .mud-nav-link-expand-icon.mud-transform {
+        fill: #fff;
+    }
+
+    .mud-nav-link {
+        padding: 15px 10px;
+    }
+
+        .mud-nav-link:hover, .mud-nav-link.active {
+            background: #fff !important;
+            color: #FF6F00 !important;
+        }
+
+            .mud-nav-link:hover .mud-nav-link-expand-icon,
+            .mud-nav-link:hover .mud-nav-link-expand-icon.mud-transform{
+                fill: #FF6F00;
+            }
 </style>

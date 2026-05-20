@@ -1,5 +1,6 @@
 ﻿@using MudBlazor
 @inherits LayoutComponentBase
+@inject IJSRuntime JS
 
 <MudThemeProvider />
 <MudPopoverProvider />
@@ -7,27 +8,59 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Style="color: #FF6F00" Edge="Edge.Start" OnClick="@ToggleDrawer" />
-        <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Filled.Home" Color="Color.Secondary" Style="color: #FF6F00" />
-        <MudIconButton Icon="@Icons.Material.Filled.Notifications" Href="#" Color="Color.Info"/>
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Style="color: #FF6F00" Href="https://github.com/MudBlazor/MudBlazor" Target="_blank" />
-    </MudAppBar>
-    <MudDrawer @bind-Open="@_open" Elevation="1">
+    <AppBar Open="_open" OpenChanged="OnOpenChanged"/>
+    <MudDrawer @bind-Open="_open"
+               Elevation="1"
+               Fixed="true"
+               Variant="variant"
+               OpenMiniOnHover="true"
+               Breakpoint="Breakpoint.None"
+               ClipMode="DrawerClipMode.Always">
         <MudNavMenu>
-           <NavMenu/>
+            <NavMenu />
         </MudNavMenu>
     </MudDrawer>
-    <MudMainContent Class="pt-16 px-16">
-            @Body
+    <MudMainContent>
+        @Body
     </MudMainContent>
+
 </MudLayout>
 @code {
+    private int Width;
     private bool _open = false;
+    DrawerVariant variant => Width < 756
+            ? DrawerVariant.Responsive
+            : DrawerVariant.Mini;
+    private DotNetObjectReference<MainLayout>? _objRef;
 
-    private void ToggleDrawer()
+    [JSInvokable]
+    public void UpdateBrowserWidth(int width)
     {
-        _open = !_open;
+        Width = width;
+
+        InvokeAsync(StateHasChanged);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+
+            await JS.InvokeVoidAsync(
+                "browserSize.registerResizeCallback",
+                _objRef
+            );
+        }
+    }
+
+    public void Dispose()
+    {
+        _objRef?.Dispose();
+    }
+
+    private void OnOpenChanged(bool value)
+    {
+        _open = value;
     }
 }

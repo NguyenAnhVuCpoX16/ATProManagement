@@ -70,3 +70,35 @@ a, .btn-link {
 .mud-toolbar{
     background: #fff;
 }
+.text-main {
+    color: #FF6F00 !important;
+}
+.text-bold{
+    font-weight:bold !important;
+}
+
+.text-white{
+    color: #fff !important; 
+}
+
+@media screen and (min-width: 768px) {
+    .toolbar-desktop {
+        display:block;
+    }
+    .toolbar-mobile {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .toolbar-desktop {
+        display: none;
+    }
+
+    .toolbar-mobile {
+        display: block;
+    }
+}
+.toolbar-mobile-menu button svg {
+    fill: #FF6F00 !important;
+}

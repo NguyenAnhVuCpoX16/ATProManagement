@@ -1,0 +1,64 @@
+﻿<MudAppBar Elevation="1" Fixed="true">
+    <MudIconButton Icon="@IconMenu"
+                   Style="color: #FF6F00"
+                   Edge="Edge.Start"
+                   OnClick="@ToggleDrawer" />
+    <MudText Typo="Typo.h6" Class="text-main text-bold">ATPro</MudText>
+    <MudSpacer />
+    <div class="toolbar-desktop">
+        <MudIconButton Icon="@Icons.Material.Filled.Search" Color="Color.Secondary" />
+        <MudIconButton Icon="@Icons.Material.Filled.Fullscreen" Color="Color.Secondary" />
+        <MudIconButton Icon="@Icons.Material.Filled.Home"
+                       Style="color: #FF6F00" />
+        <MudBadge Content="100" Color="Color.Secondary" Overlap="true" Class="mx-6 my-4">
+            <MudIcon Icon="@Icons.Material.Filled.Email" Style="color: #FF6F00" />
+        </MudBadge>
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
+                       Style="color: #FF6F00"
+                       Href="https://github.com/MudBlazor/MudBlazor"
+                       Target="_blank" />
+    </div>
+    <div class="toolbar-mobile">
+        <MudButtonGroup>
+            <MudMenu Icon="@Icons.Material.Filled.MoreVert" Style="align-self: auto;" Class="toolbar-mobile-menu">
+                <MudMenuItem>  <MudIconButton Icon="@Icons.Material.Filled.Search" Color="Color.Secondary" /></MudMenuItem>
+                <MudMenuItem><MudIconButton Icon="@Icons.Material.Filled.Fullscreen" Color="Color.Secondary" /></MudMenuItem>
+                <MudMenuItem>
+                    <MudIconButton Icon="@Icons.Material.Filled.Home"
+                                   Style="color: #FF6F00" />
+                </MudMenuItem>
+                <MudMenuItem>
+                    <MudBadge Content="100" Color="Color.Secondary" Overlap="true" Class="mx-6 my-4">
+                        <MudIcon Icon="@Icons.Material.Filled.Email" Style="color: #FF6F00" />
+                    </MudBadge>
+                </MudMenuItem>
+            </MudMenu>
+        </MudButtonGroup>
+    </div>
+   
+</MudAppBar>
+@code{
+    [Parameter]
+    public bool Open { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OpenChanged { get; set; }
+
+    private string IconMenu =>
+    Open
+    ? Icons.Material.Filled.Close
+    : Icons.Material.Filled.Menu;
+    private async void ToggleDrawer()
+    {
+        Open = !Open;
+        await OpenChanged.InvokeAsync(Open);
+    }
+}
+<style>
+    .mud-list.mud-menu-list{
+        background: #fff;
+    }
+    .mud-menu-list .mud-menu-item{
+        text-align: center;
+    }
+</style>

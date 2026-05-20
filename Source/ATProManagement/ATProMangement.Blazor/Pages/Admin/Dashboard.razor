@@ -1,0 +1,437 @@
+﻿<MudGrid Class="dashboard-container">
+    <!-- HEADER -->
+    <MudItem xs="12">
+
+        <MudPaper Class="pa-6 dashboard-header" Elevation="0">
+
+            <MudText Typo="Typo.h4" Class="fw-bold">
+                Dashboard
+            </MudText>
+
+            <MudText Typo="Typo.body1" Class="mud-text-secondary text-white">
+                Welcome back 👋 Here's what's happening today.
+            </MudText>
+
+        </MudPaper>
+
+    </MudItem>
+
+    <!-- STATS -->
+    <MudItem xs="12" sm="6" md="3">
+
+        <MudCard Class="dashboard-card revenue-card">
+
+            <MudCardContent>
+
+                <div class="d-flex justify-space-between align-center">
+
+                    <div>
+
+                        <MudText Typo="Typo.subtitle2">
+                            Revenue
+                        </MudText>
+
+                        <MudText Typo="Typo.h4" Class="fw-bold">
+                            $24,500
+                        </MudText>
+
+                        <MudChip T="string"
+                                 Color="Color.Success"
+                                 Variant="Variant.Text">
+                            +12%
+                        </MudChip>
+
+                    </div>
+
+                    <MudAvatar Color="Color.Warning" Size="Size.Large">
+                        <MudIcon Icon="@Icons.Material.Filled.AttachMoney" />
+                    </MudAvatar>
+
+                </div>
+
+            </MudCardContent>
+
+        </MudCard>
+
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+
+        <MudCard Class="dashboard-card">
+
+            <MudCardContent>
+
+                <div class="d-flex justify-space-between align-center">
+
+                    <div>
+
+                        <MudText Typo="Typo.subtitle2">
+                            Orders
+                        </MudText>
+
+                        <MudText Typo="Typo.h4" Class="fw-bold">
+                            1,245
+                        </MudText>
+
+                        <MudChip T="string"
+                                 Color="Color.Info"
+                                 Variant="Variant.Text">
+                            +8%
+                        </MudChip>
+
+                    </div>
+
+                    <MudAvatar Class="orange-avatar" Size="Size.Large">
+                        <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" />
+                    </MudAvatar>
+
+                </div>
+
+            </MudCardContent>
+
+        </MudCard>
+
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+
+        <MudCard Class="dashboard-card">
+
+            <MudCardContent>
+
+                <div class="d-flex justify-space-between align-center">
+
+                    <div>
+
+                        <MudText Typo="Typo.subtitle2">
+                            Customers
+                        </MudText>
+
+                        <MudText Typo="Typo.h4" Class="fw-bold">
+                            845
+                        </MudText>
+
+                        <MudChip T="string"
+                                 Color="Color.Success"
+                                 Variant="Variant.Text">
+                            +21%
+                        </MudChip>
+
+                    </div>
+
+                    <MudAvatar Color="Color.Primary" Size="Size.Large">
+                        <MudIcon Icon="@Icons.Material.Filled.People" />
+                    </MudAvatar>
+
+                </div>
+
+            </MudCardContent>
+
+        </MudCard>
+
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+
+        <MudCard Class="dashboard-card">
+
+            <MudCardContent>
+
+                <div class="d-flex justify-space-between align-center">
+
+                    <div>
+
+                        <MudText Typo="Typo.subtitle2">
+                            Products
+                        </MudText>
+
+                        <MudText Typo="Typo.h4" Class="fw-bold">
+                            312
+                        </MudText>
+
+                        <MudChip T="string"
+                                 Color="Color.Warning"
+                                 Variant="Variant.Text">
+                            +5%
+                        </MudChip>
+
+                    </div>
+
+                    <MudAvatar Color="Color.Secondary" Size="Size.Large">
+                        <MudIcon Icon="@Icons.Material.Filled.Inventory2" />
+                    </MudAvatar>
+
+                </div>
+
+            </MudCardContent>
+
+        </MudCard>
+
+    </MudItem>
+
+    <!-- CHART -->
+    <MudItem xs="12" md="8">
+
+        <MudPaper Class="pa-4 chart-card">
+
+            <div class="d-flex justify-space-between align-center mb-4">
+
+                <MudText Typo="Typo.h6">
+                    Revenue Analytics
+                </MudText>
+
+                <MudChip T="string"
+                         Color="Color.Warning">
+                    Monthly
+                </MudChip>
+
+            </div>
+
+            <MudChart T="double"
+                      ChartType="ChartType.Line"
+                      ChartSeries="_series"
+                      ChartLabels="_labels"
+                      Width="100%"
+                      Height="350px"
+                      ChartOptions="_options" />
+
+        </MudPaper>
+
+    </MudItem>
+
+    <!-- ACTIVITY -->
+    <MudItem xs="12" md="4">
+
+        <MudPaper Class="pa-4 activity-card">
+
+            <MudText Typo="Typo.h6" Class="mb-4">
+                Recent Activity
+            </MudText>
+
+            <MudTimeline>
+
+                <MudTimelineItem Color="Color.Success">
+                    New order received
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Info">
+                    Customer registered
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Warning">
+                    Product stock low
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Error">
+                    Payment failed
+                </MudTimelineItem>
+
+            </MudTimeline>
+
+        </MudPaper>
+
+    </MudItem>
+
+    <!-- TABLE -->
+    <MudItem xs="12" md="8">
+
+        <MudPaper Class="pa-4 table-card">
+
+            <div class="d-flex justify-space-between align-center mb-4">
+
+                <MudText Typo="Typo.h6">
+                    Recent Orders
+                </MudText>
+
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Warning">
+                    View All
+                </MudButton>
+
+            </div>
+
+            <MudTable Items="_orders"
+                      Hover="true"
+                      Dense="true"
+                      Striped="true">
+
+                <HeaderContent>
+
+                    <MudTh>Order ID</MudTh>
+                    <MudTh>Customer</MudTh>
+                    <MudTh>Total</MudTh>
+                    <MudTh>Status</MudTh>
+
+                </HeaderContent>
+
+                <RowTemplate>
+
+                    <MudTd>@context.Id</MudTd>
+                    <MudTd>@context.Customer</MudTd>
+                    <MudTd>@context.Total</MudTd>
+
+                    <MudTd>
+
+                        <MudChip T="string"
+                                 Color="Color.Success"
+                                 Variant="Variant.Filled">
+                            @context.Status
+                        </MudChip>
+
+                    </MudTd>
+
+                </RowTemplate>
+
+            </MudTable>
+
+        </MudPaper>
+
+    </MudItem>
+
+    <!-- QUICK ACTION -->
+    <MudItem xs="12" md="4">
+
+        <MudPaper Class="pa-4 quick-card">
+
+            <MudText Typo="Typo.h6" Class="mb-4">
+                Quick Actions
+            </MudText>
+
+            <div class="d-grid gap-3">
+
+                <MudButton FullWidth="true"
+                           StartIcon="@Icons.Material.Filled.Add"
+                           Variant="Variant.Filled"
+                           Color="Color.Warning">
+
+                    Add Product
+
+                </MudButton>
+
+                <MudButton FullWidth="true"
+                           StartIcon="@Icons.Material.Filled.PersonAdd"
+                           Variant="Variant.Outlined"
+                           Color="Color.Warning">
+
+                    Add Customer
+
+                </MudButton>
+
+                <MudButton FullWidth="true"
+                           StartIcon="@Icons.Material.Filled.Assessment"
+                           Variant="Variant.Text"
+                           Color="Color.Warning">
+
+                    Generate Report
+
+                </MudButton>
+
+            </div>
+
+        </MudPaper>
+
+    </MudItem>
+
+</MudGrid>
+
+<style id="mrk0s7">
+    .dashboard-container {
+        padding: 24px;
+        background: #f7f8fc;
+        min-height: 100vh;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, #FF6F00, #ff9800);
+        color: white;
+        border-radius: 20px;
+    }
+
+    .dashboard-card {
+        border-radius: 18px;
+        transition: .3s;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-4px);
+    }
+
+    .chart-card,
+    .activity-card,
+    .table-card,
+    .quick-card {
+        border-radius: 18px;
+    }
+
+    .orange-avatar {
+        background: #FF6F00;
+        color: white;
+    }
+
+    .revenue-card {
+        background: linear-gradient(135deg, #fff3e0, #ffffff);
+    }
+
+    .fw-bold {
+        font-weight: 700;
+    }
+
+    .d-grid {
+        display: grid;
+    }
+
+    .gap-3 {
+        gap: 12px;
+    }
+</style>
+
+@code {
+
+    private MudTheme _theme = new()
+    {
+        PaletteLight = new PaletteLight()
+        {
+            Primary = "#FF6F00",
+            Secondary = "#FFA726",
+            AppbarBackground = "#FFFFFF",
+            Background = "#f7f8fc",
+            Surface = "#ffffff"
+        }
+    };
+
+    private List<OrderModel> _orders = new()
+    {
+        new() { Id = "ORD-1001", Customer = "John", Total = "$120", Status = "Completed" },
+        new() { Id = "ORD-1002", Customer = "David", Total = "$250", Status = "Completed" },
+        new() { Id = "ORD-1003", Customer = "Anna", Total = "$95", Status = "Completed" },
+        new() { Id = "ORD-1004", Customer = "Lisa", Total = "$420", Status = "Completed" },
+        new() { Id = "ORD-1005", Customer = "Alex", Total = "$180", Status = "Completed" }
+    };
+
+    private string[] _labels =
+    {
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun"
+    };
+
+    private List<ChartSeries<double>> _series = new()
+    {
+        new ChartSeries<double>()
+        {
+            Name = "Revenue",
+            Data = new double[]
+            {
+                12, 18, 15, 25, 32, 40
+            }
+        }
+    };
+
+    private ChartOptions _options = new(){ShowLegend = true};
+
+    public class OrderModel
+    {
+        public string Id { get; set; } = "";
+        public string Customer { get; set; } = "";
+        public string Total { get; set; } = "";
+        public string Status { get; set; } = "";
+    }
+}
