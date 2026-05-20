@@ -1,22 +1,74 @@
-using ATProMangement.Blazor.Data;
+using ATPromanagement.Abstract;
+using ATProManagement.Abstract;
+using ATProManagement.Context;
+using ATProManagement.Db;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var services = builder.Services;
+var configs = builder.Configuration;
+services.AddControllers();
 // Add services to the container.
-builder.Services.AddMudServices();
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+services.AddEndpointsApiExplorer();
+//services.AddOpenApi();
+services.AddMudServices();
+services.AddServerSideBlazor();
+services.AddRazorPages();
+services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "ATProManagement",
+        Version = "v1"
+    });
+});
+
+services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(
+        configs.GetConnectionString("mysql"),
+        ServerVersion.AutoDetect(configs.GetConnectionString("mysql"))
+    )
+);
+services.AddScoped<IDbContext>(
+    x => x.GetRequiredService<AppDbContext>()
+);
+var assemblies = AssembliesUtil.GetAspNetAssemblies();
+var aspnetModules = assemblies.GetInstances<IModuleAspNet>();
+foreach (var module in aspnetModules)
+{
+    module.ConfigureServices(services, configs);
+}
 var app = builder.Build();
+app.UseCors("AllowAll");
+app.UseDefaultFiles();
+app.MapStaticAssets();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+app.MapOpenApi();
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ATProManagement API V1");
+
+    // Hide Schemas
+    c.DefaultModelsExpandDepth(-1);
+});
 
 app.UseHttpsRedirection();
 

@@ -1,0 +1,46 @@
+﻿<MudPaper Class="toolbar-container pa-3 mb-4" Elevation="0">
+
+    <div class="d-flex align-center">
+        <MudText Typo="Typo.h6" Class="text-main">
+            @Title
+        </MudText>
+        <MudSpacer />
+        <MudButtonGroup Color="Color.Secondary"
+                        Variant="Variant.Outlined" Class="menu-toolbar">
+            <MudIconButton Icon="@Icons.Material.Filled.FilterAlt"
+                           Color="Color.Secondary" />
+            <MudIconButton Icon="@Icons.Material.Filled.Refresh"
+                           Color="Color.Secondary" />
+            <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown">
+
+                <MudMenuItem>
+                    Export Excel
+                </MudMenuItem>
+                <MudMenuItem>
+                    Export PDF
+                </MudMenuItem>
+                <MudMenuItem>
+                    Import Excel
+                </MudMenuItem>
+            </MudMenu>
+        </MudButtonGroup>
+    </div>
+</MudPaper>
+
+<style>
+    .toolbar-container {
+        border-radius: 18px;
+        background: white;
+        border: 1px solid rgba(255,111,0,.08);
+        box-shadow: 0 4px 12px rgba(0,0,0,.04);
+        position: relative;
+    }
+
+    .menu-toolbar button{
+        border-radius: 0px !important;
+    }
+</style>
+@code{
+    [Parameter]
+    public string Title { get; set; } = "ATPro";    
+}

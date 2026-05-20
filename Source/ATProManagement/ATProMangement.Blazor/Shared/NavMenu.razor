@@ -1,14 +1,16 @@
-﻿<MudPaper Width="250px" Class="py-3" Elevation="0">
+﻿<MudPaper Width="250px" Elevation="0">
     <MudNavMenu>
-        <MudNavLink Href="/" Icon="@Icons.Material.Filled.Dashboard" IconColor="Color.Surface" Class="text-white">Dashboard</MudNavLink>
-        <MudNavGroup Title="Education" Icon="@Icons.Material.Filled.PlaylistAddCircle" IconColor="Color.Surface" Class="text-white">
-            <MudNavLink Href="/#" Icon="@Icons.Material.Filled.ChecklistRtl" IconColor="Color.Surface" Class="text-white">Courses</MudNavLink>
-            <MudNavLink Href="/#" Icon="@Icons.Material.Filled.SupervisedUserCircle" IconColor="Color.Surface" Class="text-white">Client</MudNavLink>
+        <MudNavLink Href="/" Icon="@Icons.Material.Filled.Dashboard" IconColor="Color.Surface" Match="NavLinkMatch.All" Class="text-white custom-nav-link">
+            Dashboard
+        </MudNavLink>
+        <MudNavGroup Title="Education" Icon="@Icons.Material.Filled.PlaylistAddCircle" IconColor="Color.Surface" Class="text-white custom-nav-link nav-list">
+            <MudNavLink Href="/admin/courses" Icon="@Icons.Material.Filled.ChecklistRtl" IconColor="Color.Surface" Class="text-white custom-nav-link">Courses</MudNavLink>
+            <MudNavLink Href="/admin/clients" Icon="@Icons.Material.Filled.SupervisedUserCircle" IconColor="Color.Surface" Class="text-white custom-nav-link">Client</MudNavLink>
         </MudNavGroup>
-        <MudNavLink Href="/#" Icon="@Icons.Material.Filled.Interests" IconColor="Color.Surface" Class="text-white">Servers</MudNavLink>
-        <MudNavLink Href="/#" Icon="@Icons.Material.Filled.Settings" IconColor="Color.Surface" Class="text-white">Settings</MudNavLink>
-        <MudNavLink Href="/#" Icon="@Icons.Material.Filled.QuestionAnswer" IconColor="Color.Surface" Class="text-white">About</MudNavLink>
-        <MudNavLink Href="/#" Icon="@Icons.Material.Filled.Logout" IconColor="Color.Surface" Class="text-white">Log out</MudNavLink>
+        <MudNavLink Href="/x" Icon="@Icons.Material.Filled.Language" IconColor="Color.Surface" Class="text-white custom-nav-link">Servers</MudNavLink>
+        <MudNavLink Href="/x" Icon="@Icons.Material.Filled.Settings" IconColor="Color.Surface" Class="text-white custom-nav-link">Settings</MudNavLink>
+        <MudNavLink Href="/x" Icon="@Icons.Material.Filled.QuestionAnswer" IconColor="Color.Surface" Class="text-white custom-nav-link">About</MudNavLink>
+        <MudNavLink Href="/x"  Icon="@Icons.Material.Filled.Logout" IconColor="Color.Surface" Class="text-white custom-nav-link">Log out</MudNavLink>
     </MudNavMenu>
 </MudPaper>
 <style>
@@ -32,7 +34,7 @@
     }
 
         .mud-nav-link:hover, .mud-nav-link.active {
-            background: #fff !important;
+            background: rgba(255,255,255,1) !important;
             color: #FF6F00 !important;
         }
 
@@ -40,4 +42,24 @@
             .mud-nav-link:hover .mud-nav-link-expand-icon.mud-transform{
                 fill: #FF6F00;
             }
+
+    .custom-nav-link .mud-nav-link-icon {
+        background: rgba(255,255,255,.2);
+        width: 35px;
+        height: 35px;
+        border-radius: 5px;
+        margin-right: 0px;
+    }
+
+    .mud-drawer-mini.mud-drawer--closed .nav-list svg.mud-nav-link-expand-icon{
+        display: none;
+    }
+    .mud-drawer-mini.mud-drawer--open .nav-list svg.mud-nav-link-expand-icon{
+        display: block;
+    }
+
+    .mud-nav-link:hover .mud-nav-link-icon,
+    .mud-nav-link.active .mud-nav-link-icon {
+        background: rgba(255, 111, 0, .2);
+    }
 </style>

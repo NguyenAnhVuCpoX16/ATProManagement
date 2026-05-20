@@ -383,6 +383,114 @@
     .gap-3 {
         gap: 12px;
     }
+    /* CARD */
+    .dashboard-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px;
+        background: rgba(255,255,255,.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,111,0,.08);
+        box-shadow: 0 4px 12px rgba(0,0,0,.04), 0 12px 24px rgba(255,111,0,.08);
+        transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+        min-height: 150px;
+    }
+
+        /* HOVER */
+        .dashboard-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255,111,0,.25);
+            box-shadow: 0 10px 20px rgba(0,0,0,.06), 0 18px 40px rgba(255,111,0,.16);
+        }
+
+        /* ORANGE TOP LINE */
+        .dashboard-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient( 90deg, #FF6F00, #FFA726 );
+        }
+
+        /* CARD CONTENT */
+        .dashboard-card .mud-card-content {
+            padding: 24px;
+        }
+
+        /* TITLE */
+        .dashboard-card .mud-typography-subtitle2 {
+            color: #757575;
+            font-size: .95rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        /* VALUE */
+        .dashboard-card .mud-typography-h4 {
+            font-weight: 800;
+            color: #212121;
+            margin-bottom: 8px;
+            letter-spacing: -.5px;
+        }
+
+        /* CHIP */
+        .dashboard-card .mud-chip {
+            font-weight: 700;
+            border-radius: 10px;
+            background: rgba(255,111,0,.08);
+            color: #FF6F00;
+        }
+
+        /* AVATAR */
+        .dashboard-card .mud-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background: linear-gradient( 135deg, #FF6F00, #FFA726 ) !important;
+            box-shadow: 0 10px 20px rgba(255,111,0,.25);
+            transition: .25s;
+        }
+
+            /* ICON */
+            .dashboard-card .mud-avatar .mud-icon-root {
+                font-size: 32px;
+                color: white;
+            }
+
+        /* AVATAR HOVER */
+        .dashboard-card:hover .mud-avatar {
+            transform: scale(1.08) rotate(-4deg);
+        }
+
+    /* SPECIAL REVENUE CARD */
+    .revenue-card {
+        background: linear-gradient( 135deg, rgba(255,111,0,.08), rgba(255,167,38,.05) ), white;
+    }
+
+    /* MOBILE */
+    @@media screen and (max-width: 768px) {
+
+        .dashboard-card {
+            border-radius: 18px;
+            min-height: auto;
+        }
+
+            .dashboard-card .mud-card-content {
+                padding: 18px;
+            }
+
+            .dashboard-card .mud-avatar {
+                width: 52px;
+                height: 52px;
+            }
+
+                .dashboard-card .mud-avatar .mud-icon-root {
+                    font-size: 26px;
+                }
+    }
+
 </style>
 
 @code {

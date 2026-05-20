@@ -1,0 +1,459 @@
+﻿@page "/admin/courses"
+
+@inject IMainContext _ctx
+@inject ISweetAlertService _swal
+
+<MudContainer MaxWidth="MaxWidth.False" Class="course-page">
+
+    <!-- HEADER -->
+    <Toolbar Title="Courses" />
+
+    <!-- STATS -->
+    <MudGrid Class="mb-4">
+
+        <MudItem xs="12" sm="6" md="3">
+
+            <MudCard Class="stat-card orange-gradient">
+
+                <MudCardContent>
+
+                    <MudText Typo="Typo.subtitle2">
+                        Total Courses
+                    </MudText>
+
+                    <MudText Typo="Typo.h4" Class="fw-bold">
+                        @_courses.Count
+                    </MudText>
+
+                </MudCardContent>
+
+            </MudCard>
+
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="3">
+
+            <MudCard Class="stat-card">
+
+                <MudCardContent>
+
+                    <MudText Typo="Typo.subtitle2">
+                        Active
+                    </MudText>
+
+                    <MudText Typo="Typo.h4" Class="fw-bold">
+                        18
+                    </MudText>
+
+                </MudCardContent>
+
+            </MudCard>
+
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="3">
+
+            <MudCard Class="stat-card">
+
+                <MudCardContent>
+
+                    <MudText Typo="Typo.subtitle2">
+                        Students
+                    </MudText>
+
+                    <MudText Typo="Typo.h4" Class="fw-bold">
+                        1,240
+                    </MudText>
+
+                </MudCardContent>
+
+            </MudCard>
+
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="3">
+
+            <MudCard Class="stat-card">
+
+                <MudCardContent>
+
+                    <MudText Typo="Typo.subtitle2">
+                        Completed
+                    </MudText>
+
+                    <MudText Typo="Typo.h4" Class="fw-bold">
+                        320
+                    </MudText>
+
+                </MudCardContent>
+
+            </MudCard>
+
+        </MudItem>
+
+    </MudGrid>
+
+    <!-- TABLE -->
+    <MudPaper Class="table-wrapper pa-4">
+
+        <div class="d-flex justify-space-between align-center mb-4 flex-wrap gap-4">
+
+            <MudText Typo="Typo.h6">
+                Course List
+            </MudText>
+
+            <MudTextField T="string"
+                          Placeholder="Search course..."
+                          Variant="Variant.Outlined"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          Class="search-box"
+                          @bind-Value="_search" />
+
+        </div>
+
+        <MudTable Items="FilteredCourses"
+                  Hover="true"
+                  Dense="true"
+                  Striped="true"
+                  Breakpoint="Breakpoint.Sm"
+                  Class="custom-table">
+
+            <HeaderContent>
+
+                <MudTh>Course Name</MudTh>
+                <MudTh>Description</MudTh>
+                <MudTh>Created</MudTh>
+                <MudTh>User</MudTh>
+                <MudTh>Actions</MudTh>
+
+            </HeaderContent>
+
+            <RowTemplate>
+
+                <MudTd>
+
+                    <div class="d-flex align-center gap-2">
+
+                        <MudAvatar Class="course-avatar">
+                            <MudIcon Icon="@Icons.Material.Filled.MenuBook" />
+                        </MudAvatar>
+
+                        <div>
+
+                            <MudText Typo="Typo.body1" Class="course-name">
+                                @context.Name
+                            </MudText>
+
+                            <MudText Typo="Typo.caption" Class="course-name">
+                                @context.Guid
+                            </MudText>
+
+                        </div>
+
+                    </div>
+
+                </MudTd>
+
+                <MudTd>
+                    @context.Description
+                </MudTd>
+
+                <MudTd>
+                    @context.TimeCreated.ToString("dd/MM/yyyy")
+                </MudTd>
+
+                <MudTd>
+                    @context.UserCreated
+                </MudTd>
+
+                <MudTd>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                   Color="Color.Warning" Class="table-action" />
+
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error" Class="table-action" />
+
+                </MudTd>
+
+            </RowTemplate>
+
+        </MudTable>
+
+    </MudPaper>
+
+</MudContainer>
+
+<style>
+    .course-page {
+        background: #f7f8fc;
+        min-height: 100vh;
+        padding: 24px;
+    }
+
+    .stat-card {
+        border-radius: 20px;
+        transition: .3s;
+        border: 1px solid rgba(255,111,0,.08);
+        box-shadow: 0 6px 20px rgba(0,0,0,.04);
+    }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+    .orange-gradient {
+        background: linear-gradient(135deg, #FF6F00, #FFA726);
+        color: white;
+    }
+
+    .table-wrapper {
+        border-radius: 24px;
+    }
+
+    .search-box {
+        width: 280px;
+    }
+
+    .custom-table .mud-table-head {
+        background: rgba(255,111,0,.06);
+    }
+
+    .custom-table .mud-table-cell {
+        border-bottom: 1px solid #f1f1f1;
+    }
+
+    .course-avatar {
+        background: linear-gradient(135deg, #FF6F00, #FFA726) !important;
+        color: white !important;
+    }
+
+    .fw-bold {
+        font-weight: 700;
+    }
+
+    .gap-2 {
+        gap: 8px;
+    }
+
+    .gap-4 {
+        gap: 16px;
+    }
+
+    @@media screen and (max-width: 768px) {
+
+        .course-page {
+            padding: 16px;
+        }
+
+        .search-box {
+            width: 100%;
+        }
+
+        .course-header {
+            border-radius: 18px;
+        }
+
+        .table-wrapper {
+            border-radius: 18px;
+        }
+    }
+
+    /* TABLE CONTAINER */
+    .custom-table {
+        border-radius: 20px;
+        overflow: hidden;
+        background: white;
+        border: 1px solid rgba(255,111,0,.08);
+        box-shadow: 0 6px 24px rgba(0,0,0,.04);
+    }
+
+        /* HEADER */
+        .custom-table .mud-table-head {
+            background: linear-gradient( 135deg, #FF6F00, #FFA726 );
+        }
+
+            /* HEADER CELL */
+            .custom-table .mud-table-head .mud-table-cell {
+                color: white !important;
+                font-size: .95rem;
+                font-weight: 700;
+                letter-spacing: .3px;
+                padding-top: 18px;
+                padding-bottom: 18px;
+                border-bottom: none;
+            }
+
+        /* BODY CELL */
+        .custom-table .mud-table-body .mud-table-cell {
+            padding-top: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f3f3f3;
+            font-size: .92rem;
+            color: #424242;
+            vertical-align: middle;
+        }
+
+        /* ROW */
+        .custom-table .mud-table-body tr {
+            transition: background .2s ease, transform .2s ease;
+        }
+
+            /* ROW HOVER */
+            .custom-table .mud-table-body tr:hover {
+                background: rgba(255,111,0,.04);
+            }
+
+            /* STRIPED */
+            .custom-table .mud-table-body tr:nth-child(even) {
+                background: rgba(0,0,0,.01);
+            }
+
+    /* AVATAR */
+    .course-avatar {
+        background: linear-gradient( 135deg, #FF6F00, #FFA726 ) !important;
+        color: white !important;
+        width: 42px;
+        height: 42px;
+        box-shadow: 0 4px 12px rgba(255,111,0,.25);
+    }
+
+    /* COURSE NAME */
+    .course-name {
+        font-weight: 700;
+        color: #212121;
+        margin-bottom: 2px;
+    }
+
+    /* GUID */
+    .course-guid {
+        color: #9e9e9e;
+        font-size: .75rem;
+    }
+
+    /* ACTION BUTTON */
+    .table-action {
+        border-radius: 12px;
+        transition: background .2s ease, transform .2s ease;
+    }
+
+        .table-action:hover {
+            background: rgba(255,111,0,.08);
+            transform: scale(1.08);
+        }
+
+    /* TABLE TOOLBAR */
+    .table-toolbar {
+        padding-bottom: 18px;
+        border-bottom: 1px solid #f1f1f1;
+        margin-bottom: 12px;
+    }
+
+    /* SEARCH */
+    .search-box .mud-input-control {
+        border-radius: 14px;
+    }
+
+    /* MOBILE */
+    @@media screen and (max-width: 768px) {
+
+        .custom-table {
+            border-radius: 16px;
+        }
+
+            .custom-table .mud-table-head .mud-table-cell {
+                font-size: .85rem;
+                padding-top: 14px;
+                padding-bottom: 14px;
+            }
+
+            .custom-table .mud-table-body .mud-table-cell {
+                padding-top: 12px;
+                padding-bottom: 12px;
+            }
+    }
+</style>
+
+@code {
+
+    private string _search = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await _swal.Loading("Loading courses...");
+        await Task.Delay(500);
+        await _swal.Success("Courses loaded!");
+    }
+
+
+    private List<EntityCourse> _courses = new()
+    {
+        new()
+        {
+            Guid = Guid.NewGuid(),
+            Name = "C# Advanced",
+            Description = "Advanced C# programming course",
+            TimeCreated = DateTime.Now.AddDays(-12),
+            UserCreated = "admin"
+        },
+
+        new()
+        {
+            Guid = Guid.NewGuid(),
+            Name = "Blazor WebAssembly",
+            Description = "Build modern web apps using Blazor",
+            TimeCreated = DateTime.Now.AddDays(-8),
+            UserCreated = "admin"
+        },
+
+        new()
+        {
+            Guid = Guid.NewGuid(),
+            Name = ".NET MAUI",
+            Description = "Cross-platform mobile development",
+            TimeCreated = DateTime.Now.AddDays(-4),
+            UserCreated = "john"
+        },
+
+        new()
+        {
+            Guid = Guid.NewGuid(),
+            Name = "Entity Framework Core",
+            Description = "Master EF Core and LINQ",
+            TimeCreated = DateTime.Now.AddDays(-2),
+            UserCreated = "alex"
+        }
+    };
+
+    private IEnumerable<EntityCourse> FilteredCourses =>
+        _courses.Where(x =>
+            string.IsNullOrWhiteSpace(_search)
+            || x.Name?.Contains(_search, StringComparison.OrdinalIgnoreCase) == true
+            || x.Description?.Contains(_search, StringComparison.OrdinalIgnoreCase) == true);
+
+    private void OpenAddDialog()
+    {
+
+    }
+
+    public class EntityBase
+    {
+        public Guid Guid { get; set; }
+
+        public DateTime TimeCreated { get; set; } = DateTime.Now;
+
+        public DateTime TimeModified { get; set; } = DateTime.Now;
+
+        public string? UserCreated { get; set; }
+
+        public string? UserModified { get; set; }
+    }
+
+    public class EntityCourse : EntityBase
+    {
+        public string? Name { get; set; }
+
+        public string? Description { get; set; }
+    }
+}

@@ -1,3 +1,5 @@
+using System;
+
 namespace ATProMangement.Blazor.Data
 {
     public class WeatherForecast

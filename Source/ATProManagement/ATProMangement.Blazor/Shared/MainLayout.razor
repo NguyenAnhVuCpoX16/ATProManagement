@@ -8,7 +8,7 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <AppBar Open="_open" OpenChanged="OnOpenChanged"/>
+    <AppBar Open="_open" OpenChanged="OnOpenChanged" />
     <MudDrawer @bind-Open="_open"
                Elevation="1"
                Fixed="true"
@@ -20,10 +20,11 @@
             <NavMenu />
         </MudNavMenu>
     </MudDrawer>
+    @if(_layoutReady){
     <MudMainContent>
         @Body
     </MudMainContent>
-
+    }
 </MudLayout>
 @code {
     private int Width;
@@ -32,19 +33,25 @@
             ? DrawerVariant.Responsive
             : DrawerVariant.Mini;
     private DotNetObjectReference<MainLayout>? _objRef;
+    private bool _layoutReady;
 
     [JSInvokable]
     public void UpdateBrowserWidth(int width)
     {
         Width = width;
-
-        InvokeAsync(StateHasChanged);
+        ResetUI();
+        InvokeAsync(() =>
+        {
+            ResetUI();
+            StateHasChanged();
+        });
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            _layoutReady = true;
             _objRef = DotNetObjectReference.Create(this);
 
             await JS.InvokeVoidAsync(
@@ -62,5 +69,12 @@
     private void OnOpenChanged(bool value)
     {
         _open = value;
+    }
+
+    private void ResetUI()
+    {
+        _open = true;
+        StateHasChanged();
+        _open = false;
     }
 }

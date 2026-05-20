@@ -5,23 +5,15 @@ using System.Text;
 
 namespace ATProManagement.Context
 {
-    public class MyContext : IMyContext
+    public class MainContext : IMainContext
     {
-        private readonly IDbContext _db;
         public event Action<object[]> StateChanged;
         private readonly IServiceProvider _provider;
-        public MyContext(IDbContext db, IServiceProvider provider)
+        public MainContext(IServiceProvider provider)
         {
-            _db = db;
             _provider = provider;
         }
-
-        public IDbContext ConnectDb()
-        {
-            return _db;
-        }
-
-        public T GetService<T>() 
+        public T GetService<T>()
         {
             return _provider.GetService<T>();
         }
