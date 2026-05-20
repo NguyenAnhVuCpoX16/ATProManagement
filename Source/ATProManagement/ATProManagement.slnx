@@ -10,7 +10,6 @@
     <Project Path="ATProManagement.Core/ATProManagement.Core.csproj" Id="ef55fd2f-42ac-43a4-b8e9-8228916cd617" />
     <Project Path="ATProManagement.Service/ATProManagement.Service.csproj" Id="55061782-2550-4f3b-8eca-4277315c438a" />
   </Folder>
-  <Project Path="ATProManagement.Blazor/ATProManagement.Blazor.csproj" Id="c4fe9996-5289-40ea-9b70-1bf130c7bc47" />
   <Project Path="atpromanagement.client/ATProManagement.Client.esproj">
     <Build />
     <Deploy />

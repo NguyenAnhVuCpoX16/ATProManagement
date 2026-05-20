@@ -2,6 +2,7 @@
 using ATProManagement.Db;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ATProManagement.Base;
 
 namespace ATProManagement.Abstract
 {
@@ -15,8 +16,9 @@ namespace ATProManagement.Abstract
         public void ConfigureServices(IServiceCollection services, IConfiguration config)
         {
             services.AddScoped<IDbContext, AppDbContext>();
-
             services.AddScoped<IMyContext, MyContext>();
+            services.AddScoped<IMainContext, MainContext>();
+            BaseStatic.Register(services);
         }
     }
 }
