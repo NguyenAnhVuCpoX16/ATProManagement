@@ -8,7 +8,7 @@ namespace ATProManagement.Core
     public interface ICourseService : IServiceBase
     {
         [Post(nameof(GetData))]
-        Task<PagedResultsOf<EntityCourse>> GetData([FromBody] FilterDto filter);
+        Task<PagedResultsOf<EntityCourse>> GetData([FromBody] FilterDto filter = null);
 
         [Post(nameof(Submit))]
         Task<ResultOf<ModelCourse>> Submit([Body] ModelCourse model);

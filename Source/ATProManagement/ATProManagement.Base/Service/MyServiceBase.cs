@@ -13,13 +13,9 @@ namespace ATProManagement.Base
     public class MyServiceBase : IServiceBase
     {
         protected readonly IMyContext _ctx;
-
-        private readonly ILogger<MyServiceBase> _log;
-
-        public MyServiceBase(IMyContext ctx, ILogger<MyServiceBase> log)
+        public MyServiceBase(IMyContext ctx)
         {
             _ctx = ctx;
-            _log = log;
         }
 
         protected bool TryValidate(object model, out string outputMsg)

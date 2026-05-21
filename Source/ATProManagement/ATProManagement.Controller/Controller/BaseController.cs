@@ -8,7 +8,7 @@ namespace ATProManagement.Controller
     [Route("[controller]")]
     public class BaseController : MyServiceBase, IServiceBase
     {
-        public BaseController(IMyContext _ctx, ILogger<BaseController> log) : base(_ctx, log)
+        public BaseController(IMyContext _ctx) : base(_ctx)
         {
         }
     }

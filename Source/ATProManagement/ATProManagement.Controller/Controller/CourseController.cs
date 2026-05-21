@@ -12,7 +12,7 @@ namespace ATProManagement.Controller
     [Route("api/[controller]/[action]")]
     public class CourseController : CourseService, ICourseService
     {
-        public CourseController(IMyContext ctx, ILogger<CourseService> log) : base(ctx, log)
+        public CourseController(IMyContext ctx) : base(ctx)
         {
         }
     }

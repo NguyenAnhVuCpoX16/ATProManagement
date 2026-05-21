@@ -10,7 +10,7 @@ namespace ATProManagement.Service
 {
     public class CourseService : MyServiceBase, ICourseService
     {
-        public CourseService(IMyContext ctx, ILogger<CourseService> log) : base(ctx, log)
+        public CourseService(IMyContext ctx) : base(ctx)
         {
         }
 
@@ -40,9 +40,9 @@ namespace ATProManagement.Service
 
         [HttpPost]
         [Produces("application/json")]
-        public async Task<PagedResultsOf<EntityCourse>> GetData([FromBody] FilterDto filter)
+        public async Task<PagedResultsOf<EntityCourse>> GetData([FromBody] FilterDto filter = null)
         {
-            var expr = ExpressionBuilder.Build<EntityCourse>(filter.Filters);
+            var expr = ExpressionBuilder.Build<EntityCourse>(filter?.Filters);
             return await GetData<EntityCourse>(expr);
         }
 

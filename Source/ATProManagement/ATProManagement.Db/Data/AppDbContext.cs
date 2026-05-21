@@ -1,5 +1,4 @@
-﻿using ATProManagement.Context;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 
 namespace ATProManagement.Db

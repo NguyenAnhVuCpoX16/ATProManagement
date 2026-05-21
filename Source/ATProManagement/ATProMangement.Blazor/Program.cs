@@ -39,14 +39,11 @@ services.AddCors(options =>
     });
 });
 
-services.AddDbContext<AppDbContext>(options =>
+services.AddDbContextFactory<AppDbContext>(options =>
     options.UseMySql(
         configs.GetConnectionString("mysql"),
         ServerVersion.AutoDetect(configs.GetConnectionString("mysql"))
     )
-);
-services.AddScoped<IDbContext>(
-    x => x.GetRequiredService<AppDbContext>()
 );
 var assemblies = AssembliesUtil.GetAspNetAssemblies();
 var aspnetModules = assemblies.GetInstances<IModuleAspNet>();

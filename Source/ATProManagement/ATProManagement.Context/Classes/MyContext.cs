@@ -1,24 +1,25 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ATProManagement.Db;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ATProManagement.Context
 {
     public class MyContext : IMyContext
     {
+        private readonly IDbContextFactory<AppDbContext> _factory;
         private readonly IDbContext _db;
         public event Action<object[]> StateChanged;
         private readonly IServiceProvider _provider;
-        public MyContext(IDbContext db, IServiceProvider provider)
+        public MyContext(IDbContext db, IServiceProvider provider, IDbContextFactory<AppDbContext> dbFactory)
         {
             _db = db;
             _provider = provider;
+            _factory = dbFactory;
         }
 
         public IDbContext ConnectDb()
         {
-            return _db;
+            return (IDbContext)_factory.CreateDbContext();
         }
 
         public T GetService<T>() 

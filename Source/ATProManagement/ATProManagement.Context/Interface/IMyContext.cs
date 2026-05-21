@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿using ATProManagement.Db;
 namespace ATProManagement.Context
 {
     public interface IMyContext

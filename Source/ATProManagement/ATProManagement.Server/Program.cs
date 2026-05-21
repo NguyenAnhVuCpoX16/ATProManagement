@@ -40,9 +40,6 @@ services.AddDbContext<AppDbContext>(options =>
         ServerVersion.AutoDetect(configs.GetConnectionString("mysql"))
     )
 );
-services.AddScoped<IDbContext>(
-    x => x.GetRequiredService<AppDbContext>()
-);
 var assemblies = AssembliesUtil.GetAspNetAssemblies();
 var aspnetModules = assemblies.GetInstances<IModuleAspNet>();
 foreach (var module in aspnetModules)

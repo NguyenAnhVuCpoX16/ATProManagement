@@ -11,7 +11,7 @@ namespace ATPromanagement.Controller
     [Route("api/[controller]/[action]")]
     public class ClientController : ClientService, IClientService
     {
-        public ClientController(IMyContext ctx, ILogger<ClientController> log) : base(ctx, log)
+        public ClientController(IMyContext ctx) : base(ctx)
         {
         }
     }

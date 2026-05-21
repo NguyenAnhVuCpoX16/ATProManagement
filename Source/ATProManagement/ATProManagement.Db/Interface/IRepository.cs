@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace ATProManagement.Context
+namespace ATProManagement.Db
 {
     public interface IRepository<T> where T : class
     {

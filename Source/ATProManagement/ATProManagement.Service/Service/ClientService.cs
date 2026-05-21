@@ -10,8 +10,7 @@ namespace ATProManagement.Service
 {
     public class ClientService : MyServiceBase, IClientService
     {
-
-        public ClientService(IMyContext ctx, ILogger<ClientService> log) : base(ctx, log)
+        public ClientService(IMyContext ctx) : base(ctx)
         {
         }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ATProManagement.Context
+namespace ATProManagement.Db
 {
     public interface IDbContext : IDisposable
     {
