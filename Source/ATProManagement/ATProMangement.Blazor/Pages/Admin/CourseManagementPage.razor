@@ -1,40 +1,26 @@
 ﻿@page "/admin/courses"
 @using ATProManagement.Db
-
-
 @inject IMainContext _ctx
 @inject ISweetAlertService _swal
-
+@inject IDialogService Dialog
+@inject IJSRuntime js
 <MudContainer MaxWidth="MaxWidth.False" Class="course-page">
-
     <!-- HEADER -->
-    <Toolbar Title="Courses" />
-
-
-
+    <Toolbar Title="Courses" OnRefresh="LoadData" OnExcelExport="ExportExcel" OnPdfExport="ExportPDF"/>
     <!-- STATS -->
     <MudGrid Class="mb-4">
-
         <MudItem xs="12" sm="6" md="3">
-
             <MudCard Class="stat-card orange-gradient">
-
                 <MudCardContent>
-
                     <MudText Typo="Typo.subtitle2">
                         Total Courses
                     </MudText>
-
                     <MudText Typo="Typo.h4" Class="fw-bold">
                         @(_courses?.Count ?? 0)
                     </MudText>
-
                 </MudCardContent>
-
             </MudCard>
-
         </MudItem>
-
         <MudItem xs="12" sm="6" md="3">
 
             <MudCard Class="stat-card">
@@ -108,8 +94,9 @@
                         <MudTh>Course Name</MudTh>
                         <MudTh>Description</MudTh>
                         <MudTh>Created</MudTh>
-                        <MudTh>User</MudTh>
-                        <MudTh>Actions</MudTh>
+                        <MudTh>User Created</MudTh>
+                        <MudTh>User Modified</MudTh>
+                        <MudTh Class="text-center">Actions</MudTh>
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd>
@@ -137,10 +124,15 @@
                             @context.UserCreated
                         </MudTd>
                         <MudTd>
+                            @context.UserModified
+                        </MudTd>
+                        <MudTd Class="text-center">
                             <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                                           Color="Color.Warning" Class="table-action" />
+                                           Color="Color.Warning" Class="table-action"
+                                           OnClick=@(() => TableAction(context.Guid, "Edit")) />
                             <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                           Color="Color.Error" Class="table-action" />
+                                           Color="Color.Error" Class="table-action"
+                                           OnClick=@(() => TableAction(context.Guid, "Delete")) />
                         </MudTd>
                     </RowTemplate>
                     <PagerContent>
@@ -151,13 +143,77 @@
         }
     </MudPaper>
 </MudContainer>
-
+@{
+     content = @<MudGrid Spacing="3" Class="mt-2">
+        <MudItem xs="12" sm="6">
+            <MudTextField @bind-Value="model.Guid"
+                          Label="Guid"
+                          Class="input-field" ReadOnly Disabled/>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField @bind-Value="model.Name"
+                          Label="Course Name"
+                          Class="input-field" />
+        </MudItem>
+        <MudItem xs="12" sm="12">
+            <MudTextField @bind-Value="model.Description"
+                          Label="Description"
+                          Class="input-field" />
+        </MudItem>
+        <MudItem xs="6" sm="6">
+            <MudTextField @bind-Value="model.UserCreated"
+                          Label="User Created"
+                          Class="input-field" ReadOnly Disabled/>
+        </MudItem>
+        <MudItem xs="6" sm="6">
+            <MudTextField @bind-Value="model.UserModified"
+                          Label="User Modified"
+                          Class="input-field" ReadOnly Disabled/>
+        </MudItem>
+        <MudItem xs="6" sm="6">
+            <MudTextField @bind-Value="model.TimeCreated"
+                          Label="Time"
+                          Class="input-field" ReadOnly Disabled/>
+        </MudItem>
+        <MudItem xs="6" sm="6">
+            <MudTextField @bind-Value="model.TimeModified"
+                          Label="Time Modified  "
+                          Class="input-field" ReadOnly Disabled/>
+        </MudItem>
+    </MudGrid>;
+    footer = @<div>
+    <MudButton Color="Color.Secondary"
+                         Variant="Variant.Filled"
+                         StartIcon="@Icons.Material.Filled.Close"
+                       Class="btn-cancel"
+                       OnClick="DialogCancel">Cancel</MudButton>
+    <MudButton
+           StartIcon = "@Icons.Material.Filled.Save"
+           Variant = "Variant.Filled"
+           Color = "Color.Primary"
+           OnClick="Save"
+           Class = "btn-save">Save
+        </MudButton>
+    </div>;
+}
 <style>
-    .mud-table-body {
-        overflow-x: auto;
-        overflow-y: auto;
-        max-height: 70vh;
+    .custom-table {
+        display: flex;
+        flex-direction: column;
+        height: 600px;
     }
+
+        .custom-table .mud-table-container {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .custom-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: var(--mud-palette-background);
+        }
 
     .course-page {
         background: #f7f8fc;
@@ -344,30 +400,178 @@
 </style>
 
 @code {
+    RenderFragment content;
+    RenderFragment footer;
     ICourseService? service;
     private string _search = "";
     List<EntityCourse>? _dataSource;
     List<EntityCourse>? _courses;
+    ModelCourse model = new();
+    private IDialogReference? _dialog;
     protected override async Task OnInitializedAsync()
     {
-        await _swal.Loading("Loading courses...");
+        await _swal.Loading();
         service = _ctx.GetService<ICourseService>();
-        var result = await service?.GetData();
-        if (result?.Success == true)
-        {
-            _dataSource = result.Items?.ToList();
-            _courses = result.Items?.ToList();
-        }
-        else
-        {
-            await _swal.Error(result?.Message);
-        }
+        await LoadData();
         await _swal.Close();
-        StateHasChanged();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            var result = await service.GetData();
+
+            if (result?.Success == true)
+            {
+                _dataSource = result.Items?.ToList();
+                _courses = _dataSource;
+            }
+            else
+            {
+                await _swal.Error(result?.Message ?? "Error");
+            }
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
     }
 
     private void OnSearchChanged(string value)
     {
-        _courses = _dataSource.Where(x => x.Name.Contains(value) || x.Description.Contains(value)).ToList();
+        _courses = _dataSource?.Where(x => x.Name.ToUpper().Contains(value.ToUpper()) || x.Description.ToUpper().Contains(value.ToUpper())).ToList();
+    }
+
+    private async Task TableAction(Guid guid, string action)
+    {
+        try
+        {
+            switch (action)
+            {
+                case "Delete":
+                    await Delete(guid);
+                    break;
+                case "Edit":
+                    await Edit(guid);
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message, action);
+        }
+    }
+
+    private async Task Edit(Guid guid)
+    {
+        try
+        {
+            model = _dataSource?.FirstOrDefault(x => x.Guid == guid)?.ToModel<ModelCourse>() ?? new ModelCourse();
+            var parameters = new DialogParameters
+            {
+                ["Model"] = model,
+                ["Title"] = "Edit Course|Fill automatically",
+                ["ChildContent"] = content,
+                ["ChildFooter"] = footer
+            };
+            var options = new DialogOptions
+            {
+                MaxWidth = MaxWidth.Medium,
+                FullWidth = true,
+            };
+
+            _dialog = await Dialog.ShowAsync<BaseDialog>("", parameters, options);
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
+
+    }
+
+    private async Task Delete(Guid guid)
+    {
+        var result = await _swal.Confirm("Conrfirm delete item?", "Delete");
+        if (result == false) return;
+        var respone = await service.Delete(guid);
+        if (respone.Success)
+        {
+            await _swal.Success("Delete Successfully");
+            await LoadData();
+        }
+        else
+        {
+            await _swal.Error(respone.Message);
+        }
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            var result = await _swal.Confirm("Confirm save item?", "Save");
+            if (result)
+            {
+                await Submit(model);
+                DialogCancel();
+                await LoadData();
+            }
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
+    }
+
+    private void DialogCancel()
+    {
+        _dialog?.Close();
+    }
+
+    private async Task Submit(ModelCourse model)
+    {
+        try
+        {
+            await _swal.Loading("Saving...");
+            var result = await service.Submit(model);
+            await _swal.Close();
+            if (result.Success) await _swal.Success("Save Successfully");
+            else await _swal.Error(result?.Message);
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
+    }
+
+    private async Task ExportExcel()
+    {
+        try
+        {
+            await _swal.Loading("Downloading...");
+            await DownloadHelper.ExportToExcel<EntityCourse>(_courses ?? new List<EntityCourse>(), js,"Courses.xlsx");
+            await _swal.Success("Download successful");
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
+    }
+
+    private async Task ExportPDF()
+    {
+        try
+        {
+            await _swal.Loading("Downloading...");
+            await DownloadHelper.ExportToPdf<EntityCourse>(_courses ?? new List<EntityCourse>(), js);
+            await _swal.Success("Download successful");
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
     }
 }

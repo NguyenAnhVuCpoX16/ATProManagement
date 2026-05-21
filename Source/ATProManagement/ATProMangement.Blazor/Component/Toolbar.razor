@@ -1,5 +1,4 @@
 ﻿<MudPaper Class="toolbar-container pa-3 mb-4" Elevation="0">
-
     <div class="d-flex align-center">
         <MudText Typo="Typo.h6" Class="text-main">
             @Title
@@ -10,16 +9,16 @@
             <MudIconButton Icon="@Icons.Material.Filled.FilterAlt"
                            Color="Color.Secondary" />
             <MudIconButton Icon="@Icons.Material.Filled.Refresh"
+                           OnClick="Refresh"
                            Color="Color.Secondary" />
             <MudMenu Icon="@Icons.Material.Filled.ArrowDropDown">
-
-                <MudMenuItem>
-                    Export Excel
-                </MudMenuItem>
-                <MudMenuItem>
+                <MudMenuItem OnClick="PdfExport">
                     Export PDF
                 </MudMenuItem>
-                <MudMenuItem>
+                <MudMenuItem OnClick="ExcelExport">
+                    Export Excel
+                </MudMenuItem>
+                <MudMenuItem OnClick="ExcelImport">
                     Import Excel
                 </MudMenuItem>
             </MudMenu>
@@ -42,5 +41,45 @@
 </style>
 @code{
     [Parameter]
-    public string Title { get; set; } = "ATPro";    
+    public string Title { get; set; } = "ATPro";
+    
+    [Parameter]
+    public EventCallback OnRefresh { get; set; }
+
+    [Parameter]
+    public EventCallback OnFilter { get; set; }
+
+    [Parameter]
+    public EventCallback OnExcelExport { get; set; }
+
+    [Parameter]
+    public EventCallback OnExcelImport { get; set; }
+
+    [Parameter]
+    public EventCallback OnPdfExport { get; set; }
+
+    private async Task Refresh()
+    {
+        await OnRefresh.InvokeAsync();
+    }
+
+    private async Task Filter()
+    {
+        await OnFilter.InvokeAsync();
+    }
+
+    private async Task ExcelExport()
+    {
+        await OnExcelExport.InvokeAsync();
+    }
+
+    private async Task ExcelImport()
+    {
+        await OnExcelImport.InvokeAsync();
+    }
+
+    private async Task PdfExport()
+    {
+        await OnPdfExport.InvokeAsync();
+    }
 }
