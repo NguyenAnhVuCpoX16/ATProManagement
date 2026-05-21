@@ -1,0 +1,98 @@
+﻿@using ATProManagement.Service
+@using MudBlazor
+<MudDialog Class="course-dialog">
+    <DialogContent>
+        <div class="dialog-header">
+            <MudText Typo="Typo.h5" Class="dialog-title">
+                @Title.Split('|')[0] 
+            </MudText>
+            <MudText Typo="Typo.caption" Class="dialog-subtitle">
+                @Title.Split('|')[1]
+            </MudText>
+        </div>
+        @ChildContent
+        <MudDivider/>
+    </DialogContent>
+
+    <DialogActions>
+        @ChildFooter
+    </DialogActions>
+
+</MudDialog>
+@code {
+
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+    
+    [Parameter]
+    public RenderFragment ChildFooter { get; set; } = default!;
+
+    [Parameter] public ModelCourse Model { get; set; } = new();
+
+    [Parameter] public string Title { get; set; } = "Course";
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+    }
+}
+
+<style>
+    .course-dialog {
+        border-radius: 16px;
+        padding: 8px;
+    }
+
+    /* HEADER */
+    .dialog-header {
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .dialog-title {
+        font-weight: 600;
+        color: #1e1e1e;
+    }
+
+    .dialog-subtitle {
+        color: #8a8a8a;
+    }
+
+    /* INPUT STYLE */
+
+    .mud-input-outlined {
+        border-radius: 10px !important;
+    }
+
+    /* FOCUS EFFECT */
+    .mud-input:focus-within {
+        box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.15);
+    }
+
+    /* BUTTONS */
+    .btn-save {
+        border-radius: 10px;
+        padding: 8px 18px;
+        font-weight: 600;
+        box-shadow: 0 6px 14px rgba(25, 118, 210, 0.25);
+    }
+
+    .btn-cancel {
+        border-radius: 10px;
+        padding: 8px 18px;
+    }
+
+    .mud-dialog-title{
+        display: none;
+    }
+    .mud-dialog-actions {
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+   
+</style>

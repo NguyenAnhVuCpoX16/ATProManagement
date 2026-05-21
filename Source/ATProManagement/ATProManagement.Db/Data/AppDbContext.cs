@@ -21,6 +21,30 @@ namespace ATProManagement.Db
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (!typeof(EntityBase)
+                 .IsAssignableFrom(entityType.ClrType))
+                    continue;
+                var entity = modelBuilder
+                      .Entity(entityType.ClrType);
+
+                entity.Property(nameof(EntityBase.Guid))
+                      .HasColumnOrder(0);
+
+                entity.Property(nameof(EntityBase.TimeCreated))
+                      .HasColumnOrder(1);
+
+                entity.Property(nameof(EntityBase.UserCreated))
+                      .HasColumnOrder(2);
+
+                entity.Property(nameof(EntityBase.TimeModified))
+                      .HasColumnOrder(3);
+
+                entity.Property(nameof(EntityBase.UserModified))
+                      .HasColumnOrder(4);
+            }
+
             modelBuilder.Entity<EntityCourse>()
                .Property(x => x.Name)
                .IsRequired()

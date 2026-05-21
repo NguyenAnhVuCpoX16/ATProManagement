@@ -1,7 +1,9 @@
 using ATPromanagement.Abstract;
 using ATProManagement.Abstract;
+using ATProManagement.Base;
 using ATProManagement.Context;
 using ATProManagement.Db;
+using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +21,7 @@ services.AddEndpointsApiExplorer();
 services.AddMudServices();
 services.AddServerSideBlazor();
 services.AddRazorPages();
+services.AddSweetAlert2();
 services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -51,6 +54,7 @@ foreach (var module in aspnetModules)
 {
     module.ConfigureServices(services, configs);
 }
+services.AddScoped<ISweetAlertService, ATProMangement.Blazor.SweetAlertService>();
 var app = builder.Build();
 app.UseCors("AllowAll");
 app.UseDefaultFiles();
