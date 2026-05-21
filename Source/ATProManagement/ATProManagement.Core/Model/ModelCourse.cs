@@ -7,7 +7,7 @@ namespace ATProManagement.Service
     {
         public Guid Guid { get; set; }
         public DateTime? TimeCreated { get; set; } = DateTime.Now;
-        public DateTime? TimeModify { get; set; } = DateTime.Now;
+        public DateTime? TimeModified { get; set; } = DateTime.Now;
 
         public string? UserCreated { get; set; }
         public string? UserModified { get; set; }
@@ -25,7 +25,7 @@ namespace ATProManagement.Service
                 UserCreated = UserCreated ?? "Admin",
                 UserModified = UserModified ?? "Admin",
                 TimeCreated = TimeCreated ?? DateTime.Now,
-                TimeModified = TimeModify ?? DateTime.Now,
+                TimeModified = TimeModified ?? DateTime.Now,
                 Description = Description ?? string.Empty,
             };
         }

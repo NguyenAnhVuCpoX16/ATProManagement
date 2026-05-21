@@ -106,3 +106,10 @@ a, .btn-link {
     background: linear-gradient(135deg, #FF6F00, #FFA726) !important;
     color: white;
 }
+.swal2-confirm {
+    background: #1A237E !important;
+}
+
+.swal2-container.swal2-center.swal2-backdrop-show{
+    z-index: 1500 !important;
+}

@@ -6,7 +6,6 @@ namespace ATProManagement.Base
     {
         public static void Register(IServiceCollection services)
         {
-            services.AddScoped<ISweetAlertService, SweetAlerService>();
         }
     }
 }
