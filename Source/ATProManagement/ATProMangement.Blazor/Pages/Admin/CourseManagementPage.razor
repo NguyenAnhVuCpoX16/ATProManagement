@@ -1,4 +1,6 @@
 ﻿@page "/admin/courses"
+@using ATProManagement.Db
+
 
 @inject IMainContext _ctx
 @inject ISweetAlertService _swal
@@ -7,6 +9,8 @@
 
     <!-- HEADER -->
     <Toolbar Title="Courses" />
+
+
 
     <!-- STATS -->
     <MudGrid Class="mb-4">
@@ -22,7 +26,7 @@
                     </MudText>
 
                     <MudText Typo="Typo.h4" Class="fw-bold">
-                        @_courses.Count
+                        @(_courses?.Count ?? 0)
                     </MudText>
 
                 </MudCardContent>
@@ -36,61 +40,39 @@
             <MudCard Class="stat-card">
 
                 <MudCardContent>
-
                     <MudText Typo="Typo.subtitle2">
                         Active
                     </MudText>
-
                     <MudText Typo="Typo.h4" Class="fw-bold">
                         18
                     </MudText>
-
                 </MudCardContent>
-
             </MudCard>
-
         </MudItem>
-
         <MudItem xs="12" sm="6" md="3">
-
             <MudCard Class="stat-card">
-
                 <MudCardContent>
-
                     <MudText Typo="Typo.subtitle2">
                         Students
                     </MudText>
-
                     <MudText Typo="Typo.h4" Class="fw-bold">
                         1,240
                     </MudText>
-
                 </MudCardContent>
-
             </MudCard>
-
         </MudItem>
-
         <MudItem xs="12" sm="6" md="3">
-
             <MudCard Class="stat-card">
-
                 <MudCardContent>
-
                     <MudText Typo="Typo.subtitle2">
                         Completed
                     </MudText>
-
                     <MudText Typo="Typo.h4" Class="fw-bold">
                         320
                     </MudText>
-
                 </MudCardContent>
-
             </MudCard>
-
         </MudItem>
-
     </MudGrid>
 
     <!-- TABLE -->
@@ -103,89 +85,80 @@
             </MudText>
 
             <MudTextField T="string"
+                          Immediate="true"
                           Placeholder="Search course..."
-                          Variant="Variant.Outlined"
                           Adornment="Adornment.Start"
                           AdornmentIcon="@Icons.Material.Filled.Search"
                           Class="search-box"
-                          @bind-Value="_search" />
+                          ValueChanged="OnSearchChanged" />
 
         </div>
+        @if (_courses?.Count > 0)
+        {
+            <div class="table-scroll">
 
-        <MudTable Items="FilteredCourses"
-                  Hover="true"
-                  Dense="true"
-                  Striped="true"
-                  Breakpoint="Breakpoint.Sm"
-                  Class="custom-table">
-
-            <HeaderContent>
-
-                <MudTh>Course Name</MudTh>
-                <MudTh>Description</MudTh>
-                <MudTh>Created</MudTh>
-                <MudTh>User</MudTh>
-                <MudTh>Actions</MudTh>
-
-            </HeaderContent>
-
-            <RowTemplate>
-
-                <MudTd>
-
-                    <div class="d-flex align-center gap-2">
-
-                        <MudAvatar Class="course-avatar">
-                            <MudIcon Icon="@Icons.Material.Filled.MenuBook" />
-                        </MudAvatar>
-
-                        <div>
-
-                            <MudText Typo="Typo.body1" Class="course-name">
-                                @context.Name
-                            </MudText>
-
-                            <MudText Typo="Typo.caption" Class="course-name">
-                                @context.Guid
-                            </MudText>
-
-                        </div>
-
-                    </div>
-
-                </MudTd>
-
-                <MudTd>
-                    @context.Description
-                </MudTd>
-
-                <MudTd>
-                    @context.TimeCreated.ToString("dd/MM/yyyy")
-                </MudTd>
-
-                <MudTd>
-                    @context.UserCreated
-                </MudTd>
-
-                <MudTd>
-
-                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                                   Color="Color.Warning" Class="table-action" />
-
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                   Color="Color.Error" Class="table-action" />
-
-                </MudTd>
-
-            </RowTemplate>
-
-        </MudTable>
-
+                <MudTable Items="_courses"
+                          RowsPerPage="25"
+                          Hover="true"
+                          Dense="true"
+                          Striped="true"
+                          Breakpoint="Breakpoint.Sm"
+                          Class="custom-table">
+                    <HeaderContent>
+                        <MudTh>Course Name</MudTh>
+                        <MudTh>Description</MudTh>
+                        <MudTh>Created</MudTh>
+                        <MudTh>User</MudTh>
+                        <MudTh>Actions</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>
+                            <div class="d-flex align-center gap-2">
+                                <MudAvatar Class="course-avatar">
+                                    <MudIcon Icon="@Icons.Material.Filled.MenuBook" />
+                                </MudAvatar>
+                                <div>
+                                    <MudText Typo="Typo.body1" Class="course-name">
+                                        @context.Name
+                                    </MudText>
+                                    <MudText Typo="Typo.caption" Class="course-name">
+                                        @context.Guid
+                                    </MudText>
+                                </div>
+                            </div>
+                        </MudTd>
+                        <MudTd>
+                            @context.Description
+                        </MudTd>
+                        <MudTd>
+                            @context.TimeCreated.ToString("dd/MM/yyyy")
+                        </MudTd>
+                        <MudTd>
+                            @context.UserCreated
+                        </MudTd>
+                        <MudTd>
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                           Color="Color.Warning" Class="table-action" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                           Color="Color.Error" Class="table-action" />
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager />
+                    </PagerContent>
+                </MudTable>
+            </div>
+        }
     </MudPaper>
-
 </MudContainer>
 
 <style>
+    .mud-table-body {
+        overflow-x: auto;
+        overflow-y: auto;
+        max-height: 70vh;
+    }
+
     .course-page {
         background: #f7f8fc;
         min-height: 100vh;
@@ -202,11 +175,6 @@
         .stat-card:hover {
             transform: translateY(-4px);
         }
-
-    .orange-gradient {
-        background: linear-gradient(135deg, #FF6F00, #FFA726);
-        color: white;
-    }
 
     .table-wrapper {
         border-radius: 24px;
@@ -376,84 +344,30 @@
 </style>
 
 @code {
-
+    ICourseService? service;
     private string _search = "";
-
+    List<EntityCourse>? _dataSource;
+    List<EntityCourse>? _courses;
     protected override async Task OnInitializedAsync()
     {
         await _swal.Loading("Loading courses...");
-        await Task.Delay(500);
-        await _swal.Success("Courses loaded!");
-    }
-
-
-    private List<EntityCourse> _courses = new()
-    {
-        new()
+        service = _ctx.GetService<ICourseService>();
+        var result = await service?.GetData();
+        if (result?.Success == true)
         {
-            Guid = Guid.NewGuid(),
-            Name = "C# Advanced",
-            Description = "Advanced C# programming course",
-            TimeCreated = DateTime.Now.AddDays(-12),
-            UserCreated = "admin"
-        },
-
-        new()
-        {
-            Guid = Guid.NewGuid(),
-            Name = "Blazor WebAssembly",
-            Description = "Build modern web apps using Blazor",
-            TimeCreated = DateTime.Now.AddDays(-8),
-            UserCreated = "admin"
-        },
-
-        new()
-        {
-            Guid = Guid.NewGuid(),
-            Name = ".NET MAUI",
-            Description = "Cross-platform mobile development",
-            TimeCreated = DateTime.Now.AddDays(-4),
-            UserCreated = "john"
-        },
-
-        new()
-        {
-            Guid = Guid.NewGuid(),
-            Name = "Entity Framework Core",
-            Description = "Master EF Core and LINQ",
-            TimeCreated = DateTime.Now.AddDays(-2),
-            UserCreated = "alex"
+            _dataSource = result.Items?.ToList();
+            _courses = result.Items?.ToList();
         }
-    };
-
-    private IEnumerable<EntityCourse> FilteredCourses =>
-        _courses.Where(x =>
-            string.IsNullOrWhiteSpace(_search)
-            || x.Name?.Contains(_search, StringComparison.OrdinalIgnoreCase) == true
-            || x.Description?.Contains(_search, StringComparison.OrdinalIgnoreCase) == true);
-
-    private void OpenAddDialog()
-    {
-
+        else
+        {
+            await _swal.Error(result?.Message);
+        }
+        await _swal.Close();
+        StateHasChanged();
     }
 
-    public class EntityBase
+    private void OnSearchChanged(string value)
     {
-        public Guid Guid { get; set; }
-
-        public DateTime TimeCreated { get; set; } = DateTime.Now;
-
-        public DateTime TimeModified { get; set; } = DateTime.Now;
-
-        public string? UserCreated { get; set; }
-
-        public string? UserModified { get; set; }
-    }
-
-    public class EntityCourse : EntityBase
-    {
-        public string? Name { get; set; }
-
-        public string? Description { get; set; }
+        _courses = _dataSource.Where(x => x.Name.Contains(value) || x.Description.Contains(value)).ToList();
     }
 }

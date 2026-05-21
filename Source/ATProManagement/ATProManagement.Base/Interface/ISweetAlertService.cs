@@ -6,14 +6,13 @@ namespace ATProManagement.Base
 {
     public interface ISweetAlertService
     {
-        Task Success(string message, string title = "Success");
+        Task Success(string message, string title = "");
 
-        Task Error(string message, string title = "Error");
+        Task Error(string message, string title = "");
 
-        Task Warning(string message, string title = "Warning");
+        Task Warning(string message, string title = "");
 
-        Task<bool> Confirm(string message, string title = "Confirm");
-
+        Task<bool> Confirm(string message, string title = "");
         Task Loading(string title = "Loading...");
 
         Task Close();

@@ -10,7 +10,7 @@ namespace ATProManagement.Base
         {
             _js = js;
         }
-        public async Task Success(string title, string message)
+        public async Task Success(string message, string title = "")
         {
             await CloseCurrent();
             await _js.InvokeVoidAsync(
@@ -21,7 +21,7 @@ namespace ATProManagement.Base
             _isOpen = true;
         }
 
-        public async Task Error(string title, string message)
+        public async Task Error(string message, string title = "")
         {
             await CloseCurrent();
             await _js.InvokeVoidAsync(
@@ -32,7 +32,7 @@ namespace ATProManagement.Base
             _isOpen = true;
         }
 
-        public async Task Warning(string title, string message)
+        public async Task Warning(string message, string title = "")
         {
             await CloseCurrent();
             await _js.InvokeVoidAsync(
@@ -43,7 +43,7 @@ namespace ATProManagement.Base
             _isOpen = true;
         }
 
-        public async Task<bool> Confirm(string title, string message)
+        public async Task<bool> Confirm(string message, string title = "")
         {
             await CloseCurrent();
             _isOpen = true;

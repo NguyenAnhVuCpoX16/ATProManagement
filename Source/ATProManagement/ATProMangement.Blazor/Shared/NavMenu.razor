@@ -20,9 +20,17 @@
         background: linear-gradient(180deg,rgba(255, 111, 0, 1) 0%, rgba(255, 244, 140, 1) 100%) !important;
     }
 
-    .mud-paper {
-        background: transparent;
+    .sidebar .mud-paper,
+    .sidebar.mud-drawer--closed .mud-nav-link.active {
+        background: transparent !important;
     }
+
+        .mud-drawer--closed .mud-nav-link.active .mud-nav-link-icon {
+            fill: #fff;
+            background: rgba(255, 244, 140, .5);
+            border-radius: 5px;
+            margin-right: 0px;
+        }
 
     .mud-nav-link .mud-nav-link-expand-icon, 
     .mud-navmenu.mud-navmenu-default .mud-nav-link-expand-icon.mud-transform {
@@ -43,14 +51,6 @@
                 fill: #FF6F00;
             }
 
-    .custom-nav-link .mud-nav-link-icon {
-        background: rgba(255,255,255,.2);
-        width: 35px;
-        height: 35px;
-        border-radius: 5px;
-        margin-right: 0px;
-    }
-
     .mud-drawer-mini.mud-drawer--closed .nav-list svg.mud-nav-link-expand-icon{
         display: none;
     }
@@ -58,8 +58,10 @@
         display: block;
     }
 
-    .mud-nav-link:hover .mud-nav-link-icon,
-    .mud-nav-link.active .mud-nav-link-icon {
-        background: rgba(255, 111, 0, .2);
+    .mud-nav-link .mud-nav-link-icon,
+    .mud-nav-link .mud-nav-link-icon {
+        width: 35px;
+        height: 35px;
     }
+   
 </style>

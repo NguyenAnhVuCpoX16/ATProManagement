@@ -102,3 +102,7 @@ a, .btn-link {
 .toolbar-mobile-menu button svg {
     fill: #FF6F00 !important;
 }
+.orange-gradient {
+    background: linear-gradient(135deg, #FF6F00, #FFA726) !important;
+    color: white;
+}

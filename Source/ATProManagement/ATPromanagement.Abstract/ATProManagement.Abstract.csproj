@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ATProManagement.Base\ATProManagement.Base.csproj" />
+    <ProjectReference Include="..\ATProManagement.Db\ATProManagement.Db.csproj" />
   </ItemGroup>
 
 </Project>
