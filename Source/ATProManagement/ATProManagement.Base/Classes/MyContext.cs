@@ -10,7 +10,6 @@ namespace ATProManagement.Context
         private readonly IDbContext _db;
         public event Action<object[]> StateChanged;
         private readonly IServiceProvider _provider;
-        private readonly IMyCookie _cookie;
         public MyContext(IDbContext db, IServiceProvider provider, IDbContextFactory<AppDbContext> dbFactory)
         {
             _db = db;

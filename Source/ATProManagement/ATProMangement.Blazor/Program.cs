@@ -4,6 +4,7 @@ using ATProManagement.Base;
 using ATProManagement.Context;
 using ATProManagement.Db;
 using CurrieTechnologies.Razor.SweetAlert2;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,7 @@ services.AddControllers();
 // Add services to the container.
 services.AddEndpointsApiExplorer();
 //services.AddOpenApi();
+services.AddHttpContextAccessor();
 services.AddMudServices();
 services.AddServerSideBlazor();
 services.AddRazorPages();
@@ -59,6 +61,7 @@ var app = builder.Build();
 app.UseCors("AllowAll");
 app.UseDefaultFiles();
 app.MapStaticAssets();
+app.MapControllers();
 
 // Configure the HTTP request pipeline.
 app.MapOpenApi();
@@ -72,7 +75,6 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 
 app.UseRouting();

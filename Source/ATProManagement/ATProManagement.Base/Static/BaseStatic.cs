@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ATProManagement.Context;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ATProManagement.Base
 {
@@ -9,6 +10,7 @@ namespace ATProManagement.Base
         public static void Register(IServiceCollection services)
         {
             services.AddScoped<LayoutStateService>();
+            services.AddScoped<IMyCookie, MyCookie>();
         }
     }
 }

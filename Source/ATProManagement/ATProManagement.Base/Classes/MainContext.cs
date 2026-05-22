@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ATProManagement.Context
 {
@@ -9,9 +6,11 @@ namespace ATProManagement.Context
     {
         public event Action<object[]> StateChanged;
         private readonly IServiceProvider _provider;
-        public MainContext(IServiceProvider provider)
+        private readonly IMyCookie _cookie;
+        public MainContext(IServiceProvider provider, IMyCookie cookie)
         {
             _provider = provider;
+            _cookie = cookie;
         }
         public T GetService<T>()
         {
@@ -21,6 +20,26 @@ namespace ATProManagement.Context
         public void NotifyStateChanged(params object[] evt)
         {
             StateChanged?.Invoke(evt);
+        }
+
+        public async Task<T> GetCookie<T>(string key)
+        {
+            return await _cookie.Get<T>(key);
+        }
+
+        public Task SetCookie(string key, object value, int days = 3)
+        {
+            return _cookie.Set(key, value, days);
+        }
+
+        public Task RemoveCookie(string key)
+        {
+            return _cookie.Remove(key);
+        }
+
+        public async Task<bool> ExistCookie(string key)
+        {
+            return await _cookie.Exist(key);
         }
     }
 }
