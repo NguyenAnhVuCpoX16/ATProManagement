@@ -2,7 +2,6 @@
   <Folder Name="/Abstract/">
     <Project Path="ATPromanagement.Abstract/ATPromanagement.Abstract.csproj" Id="91ed8459-4184-4894-8c83-e0390a1bd737" />
     <Project Path="ATProManagement.Base/ATProManagement.Base.csproj" Id="67cf6f24-e33b-45a8-a3a8-8c873b38369b" />
-    <Project Path="ATProManagement.Context/ATProManagement.Context.csproj" Id="9ac9c73f-b952-41d3-a0c9-73fff778f2c2" />
     <Project Path="ATProManagement.Db/ATProManagement.Db.csproj" Id="24557327-acfd-4079-b896-59fb56b401ff" />
   </Folder>
   <Folder Name="/Service/">

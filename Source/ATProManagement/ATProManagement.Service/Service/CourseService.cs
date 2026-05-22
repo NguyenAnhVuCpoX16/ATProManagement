@@ -81,14 +81,14 @@ namespace ATProManagement.Service
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Produces("application/json")]
-        public async Task<ResultOf<ModelClient>> GetCourse()
+        public async Task<ResultOf<List<EntityCourse>>> GetCourse()
         {
             try
             {
                 var list = new List<EntityCourse>();
-                for (int i = 1; i <= 100; i++)
+                for (int i = 1; i <= 5; i++)
                 {
                     list.Add(new EntityCourse
                     {
@@ -105,7 +105,7 @@ namespace ATProManagement.Service
                 {
                     await db.Repo<EntityCourse>().InsertRange(list.ToArray());
                 }
-                return new ModelClient();
+                return list;
             }
             catch (Exception ex)
             {

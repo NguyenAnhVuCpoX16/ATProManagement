@@ -1,6 +1,7 @@
-﻿using ATProManagement.Base;
-using ATProManagement.Core;
+﻿using ATPromanagement.Base;
+using ATProManagement.Base;
 using ATProManagement.Context;
+using ATProManagement.Core;
 using ATProManagement.Db;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -44,9 +45,9 @@ namespace ATProManagement.Service
 
         [HttpPost]
         [Produces("application/json")]
-        public async Task<PagedResultsOf<EntityClient>> GetData([FromBody] FilterDto filter)
+        public async Task<PagedResultsOf<EntityClient>> GetData([FromBody] FilterDto filter = null)
         {
-            var expr = ExpressionBuilder.Build<EntityClient>(filter.Filters);
+            var expr = ExpressionBuilder.Build<EntityClient>(filter?.Filters);
             return await GetData<EntityClient>(expr);
         }
 
@@ -90,27 +91,51 @@ namespace ATProManagement.Service
 
         [HttpPost]
         [Produces("application/json")]
+        public async Task<Result> RemoveRange(List<EntityClient> list)
+        {
+            try
+            {
+                using (var db = _ctx.ConnectDb())
+                {
+                    await db.Repo<EntityClient>().RemoveRange(list.ToArray());
+                    await db.SaveChangesAsync();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        [HttpPost]
+        [Produces("application/json")]
         public async Task<ResultOf<ModelClient>> GetClient()
         {
             try
             {
-                var list = new List<EntityClient>();
-                for (int i = 1; i <= 100; i++)
-                {
-                    list.Add(new EntityClient
-                    {
-                        Guid = Guid.NewGuid(),
-                        Name = $"Client {i}",
-                        Email = $"client{i}@example.com",
-                        Phone = $"123-456-789{i}",
-                        TimeCreated = DateTime.Now,
-                        TimeModified = DateTime.Now,
-                        UserCreated = "Admin",
-                        UserModified = "Admin",
-                    });
-                }
+                var rd = new Random();
                 using (var db = _ctx.ConnectDb())
                 {
+                    var courses = await db.Repo<EntityCourse>().GetList();
+                    var list = new List<EntityClient>();
+                    for (int i = 1; i <= 100; i++)
+                    {
+                        var course = courses[rd.Next(0, courses.Count)];
+                        list.Add(new EntityClient
+                        {
+                            Guid = Guid.NewGuid(),
+                            Name = $"Client {i}",
+                            Email = $"client{i}@example.com",
+                            Phone = $"123-456-789{i}",
+                            TimeCreated = DateTime.Now,
+                            TimeModified = DateTime.Now,
+                            UserCreated = "Admin",
+                            UserModified = "Admin",
+                            CourseName = course.Name,
+                            GuidCourse = course.Guid,
+                        });
+                    }
                     await db.Repo<EntityClient>().InsertRange(list.ToArray());
                 }
                 return new ModelClient();
@@ -119,6 +144,13 @@ namespace ATProManagement.Service
             {
                 return (ex.Message);
             }
+        }
+
+        [HttpGet]
+        [Produces("application/json")]
+        public async Task<ResultsOf<OptionItem<string>>> GetCourseOptions()
+        {
+            return await base.GetCourseOptions();
         }
     }
 }

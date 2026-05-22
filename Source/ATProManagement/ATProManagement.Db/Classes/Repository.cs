@@ -53,14 +53,14 @@ namespace ATProManagement.Db
             _db.Set<T>().Remove(entity);
         }
 
-        public virtual Task<IList<T>> GetList()
+        public virtual async Task<IList<T>> GetList()
         {
-            throw new NotImplementedException();
+            return await _db.Set<T>().ToListAsync();
         }
 
-        public virtual Task<IList<T>> GetList(Expression<Func<T, bool>>? filter)
+        public virtual async Task<IList<T>> GetList(Expression<Func<T, bool>>? filter)
         {
-            throw new NotImplementedException();
+            return await this.Query(filter).ToListAsync();
         }
 
         public virtual async Task<bool> Exists(Expression<Func<T, bool>> filter)

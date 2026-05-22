@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ATProManagement.Context\ATProManagement.Context.csproj" />
     <ProjectReference Include="..\ATProManagement.Db\ATProManagement.Db.csproj" />
   </ItemGroup>
 

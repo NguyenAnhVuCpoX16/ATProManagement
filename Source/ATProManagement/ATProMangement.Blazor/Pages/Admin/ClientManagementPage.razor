@@ -1,174 +1,14 @@
 ﻿@page "/admin/clients"
-
-<MudContainer MaxWidth="MaxWidth.False" Class="client-dashboard">
-    <!-- TOP HEADER -->
-    <Toolbar Title="Clients"/>
-    <!-- DASHBOARD -->
-    <MudGrid Class="mt-1">
-        <!-- LEFT SIDE -->
-        <MudItem xs="12" lg="3">
-            <MudStack Spacing="3">
-                <!-- STATS -->
-                <MudPaper Class="side-card total-card">
-                    <MudIcon Icon="@Icons.Material.Filled.Groups"
-                             Size="Size.Large"
-                             Class="side-icon" />
-                    <MudText Typo="Typo.caption">
-                        TOTAL CLIENTS
-                    </MudText>
-                    <MudText Typo="Typo.h3" Class="fw-bold">
-                        @_clients.Count
-                    </MudText>
-                </MudPaper>
-                <MudPaper Class="side-card">
-                    <div class="mini-stat">
-                        <div>
-                            <MudText Typo="Typo.body2">
-                                New Today
-                            </MudText>
-                            <MudText Typo="Typo.h5" Class="fw-bold">
-                                12
-                            </MudText>
-                        </div>
-                        <MudAvatar Class="mini-avatar blue-bg">
-                            <MudIcon Icon="@Icons.Material.Filled.TrendingUp" />
-                        </MudAvatar>
-                    </div>
-                </MudPaper>
-                <MudPaper Class="side-card">
-                    <div class="mini-stat">
-                        <div>
-                            <MudText Typo="Typo.body2">
-                                Messages
-                            </MudText>
-                            <MudText Typo="Typo.h5" Class="fw-bold">
-                                45
-                            </MudText>
-                        </div>
-
-                        <MudAvatar Class="mini-avatar orange-bg">
-                            <MudIcon Icon="@Icons.Material.Filled.Mail" />
-                        </MudAvatar>
-                    </div>
-                </MudPaper>
-                <MudPaper Class="side-card">
-                    <div class="mini-stat">
-                        <div>
-                            <MudText Typo="Typo.body2">
-                                Courses
-                            </MudText>
-                            <MudText Typo="Typo.h5" Class="fw-bold">
-                                8
-                            </MudText>
-                        </div>
-                        <MudAvatar Class="mini-avatar green-bg">
-                            <MudIcon Icon="@Icons.Material.Filled.MenuBook" />
-                        </MudAvatar>
-                    </div>
-                </MudPaper>
-            </MudStack>
-        </MudItem>
-
-        <!-- RIGHT SIDE -->
-        <MudItem xs="12" lg="9">
-
-            <MudPaper Class="table-panel">
-                <!-- TOOLBAR -->
-                <div class="table-toolbar">
-                    <div>
-                        <MudText Typo="Typo.h5" Class="fw-bold">
-                            Client List
-                        </MudText>
-                        <MudText Typo="Typo.body2" Color="Color.Secondary">
-                            List of all registered clients
-                        </MudText>
-                    </div>
-                    <MudTextField T="string"
-                                  Placeholder="Search..."
-                                  Adornment="Adornment.Start"
-                                  AdornmentIcon="@Icons.Material.Filled.Search"
-                                  Class="search-input"
-                                  @bind-Value="_search" />
-                </div>
-                <!-- TABLE -->
-                <MudTable Items="FilteredClients"
-                          Hover="true"
-                          Dense="true"
-                          Breakpoint="Breakpoint.Sm"
-                          Class="modern-table"
-                          RowsPerPage="25">
-                    <HeaderContent>
-                        <MudTh>Client</MudTh>
-                        <MudTh>Course</MudTh>
-                        <MudTh>Phone</MudTh>
-                        <MudTh>Date</MudTh>
-                        <MudTh></MudTh>
-                    </HeaderContent>
-                    <RowTemplate>
-                        <MudTd>
-                            <div class="client-info">
-                                <MudAvatar Class="client-avatar">
-                                    @context.Name?.Substring(0, 1)
-                                </MudAvatar>
-                                <div>
-                                    <MudText Class="client-name">
-                                        @context.Name
-                                    </MudText>
-                                    <MudText Class="client-email">
-                                        @context.Email
-                                    </MudText>
-                                </div>
-                            </div>
-
-                        </MudTd>
-                        <MudTd>
-                            <MudChip T="string"
-                                     Color="Color.Warning"
-                                     Variant="Variant.Outlined">
-                                @context.CourseName
-                            </MudChip>
-                        </MudTd>
-                        <MudTd>
-                            @context.Phone
-                        </MudTd>
-
-                        <MudTd>
-                            @context.TimeCreated.ToString("dd/MM/yyyy")
-                        </MudTd>
-
-                        <MudTd>
-
-                            <MudIconButton Icon="@Icons.Material.Filled.Visibility"
-                                           Size="Size.Small"
-                                           Class="action-btn" />
-
-                            <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                                           Color="Color.Success"
-                                           Size="Size.Small"
-                                           Class="action-btn" />
-
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                           Size="Size.Small"
-                                           Color="Color.Error"
-                                           Class="action-btn" />
-
-                        </MudTd>
-                    </RowTemplate>
-                    <PagerContent>
-                        <MudTablePager />
-                    </PagerContent>
-                </MudTable>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
-
+@inject IMainContext _ctx
+@inject ISweetAlertService _swal
+@inject IDialogService Dialog
+@inject IJSRuntime js
+@inject LayoutStateService _layoutState
 <style>
 
     .client-dashboard {
         min-height: 100vh;
         padding: 28px;
-        /* background: radial-gradient(circle at top left, rgba(255,152,0,.10), transparent 20%), radial-gradient(circle at bottom right, rgba(33,150,243,.08), transparent 20%), #f5f7fb; */
     }
 
     /* TOP BANNER */
@@ -281,10 +121,17 @@
         }
 
     /* TABLE */
+    .modern-table .mud-table-container {
+        max-height: 700px;
+        overflow-y: auto;
+    }
 
-    .modern-table {
-        border-radius: 20px;
-        overflow: hidden;
+    /* giữ header */
+    .modern-table thead {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 2;
     }
 
         .modern-table .mud-table-head {
@@ -364,86 +211,331 @@
 
 </style>
 
+<MudContainer MaxWidth="MaxWidth.False" Class="client-dashboard main-background">
+    <!-- TOP HEADER -->
+    <Toolbar Title="Clients" OnRefresh="LoadData" OnExcelExport="ExportToExcel" OnPdfExport="ExportToPDF"/>
+    <!-- DASHBOARD -->
+    <MudGrid Class="mt-1">
+        <!-- LEFT SIDE -->
+        <MudItem xs="12" lg="3">
+            <MudStack Spacing="3">
+                <!-- STATS -->
+                <MudPaper Class="side-card total-card">
+                    <MudIcon Icon="@Icons.Material.Filled.Groups"
+                             Size="Size.Large"
+                             Class="side-icon" />
+                    <MudText Typo="Typo.caption">
+                        TOTAL CLIENTS
+                    </MudText>
+                    <MudText Typo="Typo.h3" Class="fw-bold">
+                        @_clients?.Count
+                    </MudText>
+                </MudPaper>
+                <MudPaper Class="side-card">
+                    <div class="mini-stat">
+                        <div>
+                            <MudText Typo="Typo.body2">
+                                New Today
+                            </MudText>
+                            <MudText Typo="Typo.h5" Class="fw-bold">
+                                12
+                            </MudText>
+                        </div>
+                        <MudAvatar Class="mini-avatar blue-bg">
+                            <MudIcon Icon="@Icons.Material.Filled.TrendingUp" />
+                        </MudAvatar>
+                    </div>
+                </MudPaper>
+                <MudPaper Class="side-card">
+                    <div class="mini-stat">
+                        <div>
+                            <MudText Typo="Typo.body2">
+                                Messages
+                            </MudText>
+                            <MudText Typo="Typo.h5" Class="fw-bold">
+                                45
+                            </MudText>
+                        </div>
+
+                        <MudAvatar Class="mini-avatar orange-bg">
+                            <MudIcon Icon="@Icons.Material.Filled.Mail" />
+                        </MudAvatar>
+                    </div>
+                </MudPaper>
+                <MudPaper Class="side-card">
+                    <div class="mini-stat">
+                        <div>
+                            <MudText Typo="Typo.body2">
+                                Courses
+                            </MudText>
+                            <MudText Typo="Typo.h5" Class="fw-bold">
+                                8
+                            </MudText>
+                        </div>
+                        <MudAvatar Class="mini-avatar green-bg">
+                            <MudIcon Icon="@Icons.Material.Filled.MenuBook" />
+                        </MudAvatar>
+                    </div>
+                </MudPaper>
+            </MudStack>
+        </MudItem>
+
+        <!-- RIGHT SIDE -->
+        <MudItem xs="12" lg="9">
+            @if (_clients?.Count >= 0)
+            {
+                <MudPaper Class="table-panel">
+                    <!-- TOOLBAR -->
+                    <div class="table-toolbar">
+                        <div>
+                            <MudText Typo="Typo.h5" Class="fw-bold">
+                                Client List
+                            </MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">
+                                List of all registered clients
+                            </MudText>
+                        </div>
+                        <MudTextField T="string"
+                                      Placeholder="Search..."
+                                      Adornment="Adornment.Start"
+                                      AdornmentIcon="@Icons.Material.Filled.Search"
+                                      Class="search-input"
+                                      Immediate="true"
+                                      TextChanged="OnSearchChanged" />
+                        <MudSelect T="string"
+                                   Variant="Variant.Text"
+                                   Placeholder="Search Courses"
+                                   ValueChanged="OnCourseChanged">
+                            @foreach (var course in _course)
+                            {
+                                <MudSelectItem Value="course">@course</MudSelectItem>
+                            }
+                        </MudSelect>
+                        <MudButtonGroup Color="Color.Secondary" Variant="Variant.Filled">
+                            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddNew"></MudIconButton>
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="DeleteRange" Disabled="@(_layoutState.IsDesktop != true)"></MudIconButton>
+                        </MudButtonGroup>
+                    </div>
+                    <!-- TABLE -->
+                    <MudTable T="EntityClient"
+                              @bind-SelectedItems="_selectedsClients"
+                              MultiSelection="_layoutState.IsDesktop"
+                              Items="_clients"
+                              Hover="true"
+                              Dense="true"
+                              Breakpoint="Breakpoint.Sm"
+                              Class="modern-table"
+                              RowsPerPage="25">
+                        <HeaderContent>
+                            <MudTh>Client</MudTh>
+                            <MudTh>Course</MudTh>
+                            <MudTh>Phone</MudTh>
+                            <MudTh>Date</MudTh>
+                            <MudTh>Actions</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd>
+                                <div class="client-info">
+                                    <MudAvatar Class="client-avatar">
+                                        @context.Name?.Substring(0, 1)
+                                    </MudAvatar>
+                                    <div>
+                                        <MudText Class="client-name">
+                                            @context.Name
+                                        </MudText>
+                                        <MudText Class="client-email">
+                                            @context.Email
+                                        </MudText>
+                                    </div>
+                                </div>
+
+                            </MudTd>
+                            <MudTd>
+                                @if (string.IsNullOrEmpty(context.CourseName))
+                                {
+                                    <span>-</span>
+                                }
+                                else
+                                {
+                                    <MudChip T="string"
+                                             Color="Color.Warning"
+                                             Variant="Variant.Outlined">
+                                        <span>@context.CourseName</span>
+                                    </MudChip>
+                                }
+                            </MudTd>
+                            <MudTd>
+                                @context.Phone
+                            </MudTd>
+
+                            <MudTd>
+                                @context.TimeCreated.ToString("dd/MM/yyyy")
+                            </MudTd>
+                            <MudTd>
+                                <MudIconButton Icon="@Icons.Material.Filled.Visibility"
+                                               Size="Size.Small"
+                                               Class="action-btn" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                               Color="Color.Success"
+                                               Size="Size.Small"
+                                               Class="action-btn" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                               Size="Size.Small"
+                                               Color="Color.Error"
+                                               Class="action-btn" />
+                            </MudTd>
+                        </RowTemplate>
+                        <PagerContent>
+                            <MudTablePager />
+                        </PagerContent>
+                    </MudTable>
+                </MudPaper>
+            }
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
 @code {
-
+    RenderFragment content;
+    RenderFragment footer;
     private string _search = "";
-    protected override void OnInitialized()
+    private string _searchCourse = "";
+    List<EntityClient>? _dataSource;
+    List<EntityClient>? _clients;
+    IClientService service;
+    private List<string> _course;
+    ModelClient model = new();
+    private HashSet<EntityClient> _selectedsClients = new();
+
+
+    protected override async Task OnInitializedAsync()
     {
-        FilterClients();
+        await _swal.Loading();
+        service = _ctx.GetService<IClientService>();
+        await LoadData();
+        var text = await service.GetCourseOptions();
+        await _swal.Close();
     }
 
-    private List<EntityClient> _clients = new()
+    private async Task LoadData()
     {
-        new()
+        try
         {
-            Guid = Guid.NewGuid(),
-            Name = "John Smith",
-            Email = "john@gmail.com",
-            Phone = "0901234567",
-            Message = "Interested in Blazor course",
-            CourseName = "Blazor WebAssembly",
-            TimeCreated = DateTime.Now.AddDays(-3)
-        },
-
-        new()
-        {
-            Guid = Guid.NewGuid(),
-            Name = "Alex Brown",
-            Email = "alex@gmail.com",
-            Phone = "0912345678",
-            Message = "Need more information",
-            CourseName = "C# Advanced",
-            TimeCreated = DateTime.Now.AddDays(-2)
-        },
-
-        new()
-        {
-            Guid = Guid.NewGuid(),
-            Name = "Emily Johnson",
-            Email = "emily@gmail.com",
-            Phone = "0988888888",
-            Message = "Register immediately",
-            CourseName = ".NET MAUI",
-            TimeCreated = DateTime.Now.AddDays(-1)
+            var response = await service.GetData();
+            if (response?.Success == true)
+            {
+                _dataSource = response.Items?.ToList();
+                _clients = _dataSource;
+                _course = new List<string> { "All" }
+                         .Concat(_dataSource?
+                             .Select(c => c.CourseName)
+                             .Distinct() ?? Enumerable.Empty<string>())
+                         .ToList();
+            }
+            else
+            {
+                await _swal.Error(response?.Message ?? "Error");
+            }
         }
-    };
-
-    private List<EntityClient> FilteredClients = new();
-    private void FilterClients()
-    {
-        FilteredClients = _clients.Where(x =>
-            string.IsNullOrWhiteSpace(_search)
-            || x.Name?.Contains(_search, StringComparison.OrdinalIgnoreCase) == true
-            || x.Email?.Contains(_search, StringComparison.OrdinalIgnoreCase) == true
-            || x.Phone?.Contains(_search, StringComparison.OrdinalIgnoreCase) == true
-            || x.CourseName?.Contains(_search, StringComparison.OrdinalIgnoreCase) == true
-        ).ToList();
-    }
-    public class EntityBase
-    {
-        public Guid Guid { get; set; }
-
-        public DateTime TimeCreated { get; set; } = DateTime.Now;
-
-        public DateTime TimeModified { get; set; } = DateTime.Now;
-
-        public string? UserCreated { get; set; }
-
-        public string? UserModified { get; set; }
+        catch (Exception ex)
+        {
+            await _swal.Error("Error loading clients", ex.Message);
+        }
     }
 
-    public class EntityClient : EntityBase
+    private void OnSearchChanged(string value)
     {
-        public string? Name { get; set; }
+        _search = value;
+        Filter();
+    }
 
-        public string? Email { get; set; }
+    private void OnCourseChanged(string value)
+    {
+        _searchCourse = value == "All" ? "" : value;
+        Filter();
 
-        public string? Phone { get; set; }
+    }
+    void Filter()
+    {
+        _clients = _dataSource?.Where(x => (x.Name.ToUpper().Contains(_search.ToUpper())
+                                      || x.Phone.ToUpper().Contains(_search.ToUpper())
+                                      || x.Email.ToUpper().Contains(_search.ToUpper()))
+                                      && x.CourseName.ToUpper().Contains(_searchCourse.ToUpper())).ToList();
+    }
 
-        public string? Message { get; set; }
+    async Task ExportToExcel()
+    {
+        try
+        {
+            await _swal.Loading("Downloading...");
+            await DownloadHelper.ExportToExcel<EntityClient>(_clients ?? new List<EntityClient>(), js, "Clients.xlsx");
+            await _swal.Success("Download successful");
+        }
+        catch (Exception ex)
+        {
 
-        public Guid GuidCourse { get; set; }
+            await _swal.Error(ex.Message);
+        }
+    }
 
-        public string? CourseName { get; set; }
+    
+    async Task ExportToPDF()
+    {
+        try
+        {
+            await _swal.Loading("Downloading...");
+            await DownloadHelper.ExportToPdf<EntityClient>(_clients ?? new List<EntityClient>(), js);
+            await _swal.Success("Download successful");
+        }
+        catch (Exception ex)
+        {
+
+            await _swal.Error(ex.Message);
+        }
+    }
+
+    private async Task AddNew()
+    {
+        try
+        {
+            model = new();
+          
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
+    }
+
+    private async Task DeleteRange()
+    {
+        try
+        {
+            if (!_selectedsClients.Any())
+            {
+                await _swal.Warning("Please select at least one course to delete.");
+                return;
+            }
+
+            var result = await _swal.Confirm($"Confirm delete {_selectedsClients.Count} selected items?", "Delete");
+            if (result == false) return;
+
+            var respone = await service.RemoveRange(_selectedsClients.ToList());
+            if (respone.Success)
+            {
+                await _swal.Success("Delete Successfully");
+                await LoadData();
+            }
+            else
+            {
+                await _swal.Error(respone.Message);
+            }
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
+
+       
     }
 }

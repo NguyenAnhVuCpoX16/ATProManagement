@@ -1,5 +1,4 @@
 ﻿@page "/admin/courses"
-@using ATProManagement.Db
 @inject IMainContext _ctx
 @inject ISweetAlertService _swal
 @inject IDialogService Dialog
@@ -208,7 +207,7 @@
     }
 
     .mud-ripple-checkbox svg {
-        fill: #01579B !important;
+        fill: var(--mud-palette-secondary) !important;
     }
 </style>
 <MudContainer MaxWidth="MaxWidth.False" Class="course-page">
@@ -287,7 +286,7 @@
 
             <MudButtonGroup Color="Color.Secondary" Variant="Variant.Filled">
                 <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddNew"></MudIconButton>
-                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="DeleteRange" Disabled="@_layoutState.IsDesktop"></MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="DeleteRange" Disabled="@(_layoutState.IsDesktop != true)"></MudIconButton>
             </MudButtonGroup>
         </div>
         @if (_courses?.Count > 0)
@@ -374,26 +373,6 @@
             <MudTextField @bind-Value="model.Description"
                           Label="Description"
                           Class="input-field" />
-        </MudItem>
-        <MudItem xs="6" sm="6">
-            <MudTextField @bind-Value="model.UserCreated"
-                          Label="User Created"
-                          Class="input-field" ReadOnly Disabled />
-        </MudItem>
-        <MudItem xs="6" sm="6">
-            <MudTextField @bind-Value="model.UserModified"
-                          Label="User Modified"
-                          Class="input-field" ReadOnly Disabled />
-        </MudItem>
-        <MudItem xs="6" sm="6">
-            <MudTextField @bind-Value="model.TimeCreated"
-                          Label="Time"
-                          Class="input-field" ReadOnly Disabled />
-        </MudItem>
-        <MudItem xs="6" sm="6">
-            <MudTextField @bind-Value="model.TimeModified"
-                          Label="Time Modified  "
-                          Class="input-field" ReadOnly Disabled />
         </MudItem>
     </MudGrid>;
     footer = @<div>

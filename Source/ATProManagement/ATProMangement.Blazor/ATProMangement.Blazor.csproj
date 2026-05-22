@@ -19,7 +19,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ATPromanagement.Abstract\ATProManagement.Abstract.csproj" />
     <ProjectReference Include="..\ATProManagement.Base\ATProManagement.Base.csproj" />
-    <ProjectReference Include="..\ATProManagement.Context\ATProManagement.Context.csproj" />
     <ProjectReference Include="..\ATProManagement.Controller\ATProManagement.Controller.csproj" />
     <ProjectReference Include="..\ATProManagement.Core\ATProManagement.Core.csproj" />
     <ProjectReference Include="..\ATProManagement.Service\ATProManagement.Service.csproj" />

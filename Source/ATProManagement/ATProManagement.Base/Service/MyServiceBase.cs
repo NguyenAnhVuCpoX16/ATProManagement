@@ -71,7 +71,7 @@ namespace ATProManagement.Base
 
         [HttpGet]
         [Produces("application/json")]
-        public async Task<ResultsOf<OptionItem<string>>> GetCourseOptions()
+        protected async Task<ResultsOf<OptionItem<string>>> GetCourseOptions()
         {
             try
             {
