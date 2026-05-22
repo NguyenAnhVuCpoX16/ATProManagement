@@ -4,6 +4,7 @@
 @inject ISweetAlertService _swal
 @inject IDialogService Dialog
 @inject IJSRuntime js
+@inject LayoutStateService _layoutState
 <style>
     .custom-table {
         display: flex;
@@ -206,13 +207,13 @@
             }
     }
 
-    .mud-ripple-checkbox svg{
+    .mud-ripple-checkbox svg {
         fill: #01579B !important;
     }
 </style>
 <MudContainer MaxWidth="MaxWidth.False" Class="course-page">
     <!-- HEADER -->
-    <Toolbar Title="Courses" OnRefresh="LoadData" OnExcelExport="ExportExcel" OnPdfExport="ExportPDF"/>
+    <Toolbar Title="Courses" OnRefresh="LoadData" OnExcelExport="ExportExcel" OnPdfExport="ExportPDF" />
     <!-- STATS -->
     <MudGrid Class="mb-4">
         <MudItem xs="12" sm="6" md="3">
@@ -283,19 +284,19 @@
                           AdornmentIcon="@Icons.Material.Filled.Search"
                           Class="search-box"
                           ValueChanged="OnSearchChanged" />
+
             <MudButtonGroup Color="Color.Secondary" Variant="Variant.Filled">
                 <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddNew"></MudIconButton>
-                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="DeleteRange"></MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="DeleteRange" Disabled="@_layoutState.IsDesktop"></MudIconButton>
             </MudButtonGroup>
         </div>
         @if (_courses?.Count > 0)
         {
             <div class="table-scroll">
 
-                <MudTable 
-                          T="EntityCourse"
+                <MudTable T="EntityCourse"
                           @bind-SelectedItems="_selectedCourses"
-                          MultiSelection="true"
+                          MultiSelection="_layoutState.IsDesktop"
                           Items="_courses"
                           RowsPerPage="25"
                           Hover="true"
@@ -357,17 +358,17 @@
     </MudPaper>
 </MudContainer>
 @{
-     content = @<MudGrid Spacing="3" Class="mt-2">
+    content = @<MudGrid Spacing="3" Class="mt-2">
         <MudItem xs="12" sm="6">
             <MudTextField @bind-Value="model.Guid"
                           Label="Guid"
-                          Class="input-field" ReadOnly Disabled/>
+                          Class="input-field" ReadOnly Disabled />
         </MudItem>
         <MudItem xs="12" sm="6">
             <MudTextField @bind-Value="model.Name"
                           Label="Course Name"
-                          Class="input-field" 
-                          Required/>
+                          Class="input-field"
+                          Required />
         </MudItem>
         <MudItem xs="12" sm="12">
             <MudTextField @bind-Value="model.Description"
@@ -377,36 +378,36 @@
         <MudItem xs="6" sm="6">
             <MudTextField @bind-Value="model.UserCreated"
                           Label="User Created"
-                          Class="input-field" ReadOnly Disabled/>
+                          Class="input-field" ReadOnly Disabled />
         </MudItem>
         <MudItem xs="6" sm="6">
             <MudTextField @bind-Value="model.UserModified"
                           Label="User Modified"
-                          Class="input-field" ReadOnly Disabled/>
+                          Class="input-field" ReadOnly Disabled />
         </MudItem>
         <MudItem xs="6" sm="6">
             <MudTextField @bind-Value="model.TimeCreated"
                           Label="Time"
-                          Class="input-field" ReadOnly Disabled/>
+                          Class="input-field" ReadOnly Disabled />
         </MudItem>
         <MudItem xs="6" sm="6">
             <MudTextField @bind-Value="model.TimeModified"
                           Label="Time Modified  "
-                          Class="input-field" ReadOnly Disabled/>
+                          Class="input-field" ReadOnly Disabled />
         </MudItem>
     </MudGrid>;
     footer = @<div>
-    <MudButton Color="Color.Secondary"
-                         Variant="Variant.Filled"
-                         StartIcon="@Icons.Material.Filled.Close"
-                       Class="btn-cancel"
-                       OnClick="DialogCancel">Cancel</MudButton>
-    <MudButton
-           StartIcon = "@Icons.Material.Filled.Save"
-           Variant = "Variant.Filled"
-           Color = "Color.Primary"
-           OnClick="Save"
-           Class = "btn-save">Save
+        <MudButton Color="Color.Secondary"
+                   Variant="Variant.Filled"
+                   StartIcon="@Icons.Material.Filled.Close"
+                   Class="btn-cancel"
+                   OnClick="DialogCancel">Cancel</MudButton>
+        <MudButton StartIcon="@Icons.Material.Filled.Save"
+                   Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="Save"
+                   Class="btn-save">
+            Save
         </MudButton>
     </div>;
 }
@@ -479,16 +480,18 @@
 
     private async Task AddNew()
     {
-        try{
+        try
+        {
             model = new();
-            await Edit(new Guid());
-        }catch(Exception ex)
+            await Edit(new Guid(),"Add new Course");
+        }
+        catch (Exception ex)
         {
             await _swal.Error(ex.Message);
         }
     }
 
-    private async Task Edit(Guid guid)
+    private async Task Edit(Guid guid, string title = "Edit Course")
     {
         try
         {
@@ -496,7 +499,7 @@
             var parameters = new DialogParameters
             {
                 ["Model"] = model,
-                ["Title"] = "Edit Course|Fill automatically",
+                ["Title"] = $"{title}|Fill automatically",
                 ["ChildContent"] = content,
                 ["ChildFooter"] = footer
             };
@@ -533,7 +536,8 @@
 
     private async Task DeleteRange()
     {
-        try{
+        try
+        {
             if (!_selectedCourses.Any())
             {
                 await _swal.Warning("Please select at least one course to delete.");
@@ -553,7 +557,9 @@
             {
                 await _swal.Error(respone.Message);
             }
-        }catch(Exception ex){
+        }
+        catch (Exception ex)
+        {
             await _swal.Error(ex.Message);
         }
 
@@ -604,7 +610,7 @@
         try
         {
             await _swal.Loading("Downloading...");
-            await DownloadHelper.ExportToExcel<EntityCourse>(_courses ?? new List<EntityCourse>(), js,"Courses.xlsx");
+            await DownloadHelper.ExportToExcel<EntityCourse>(_courses ?? new List<EntityCourse>(), js, "Courses.xlsx");
             await _swal.Success("Download successful");
         }
         catch (Exception ex)

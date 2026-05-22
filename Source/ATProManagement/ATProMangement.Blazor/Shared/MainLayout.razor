@@ -1,6 +1,8 @@
 ﻿@using MudBlazor
 @inherits LayoutComponentBase
 @inject IJSRuntime JS
+@inject LayoutStateService LayoutState
+@implements IDisposable
 
 <MudThemeProvider />
 <MudPopoverProvider />
@@ -40,13 +42,19 @@
     public void UpdateBrowserWidth(int width)
     {
         Width = width;
-        BaseStatic.IsDesktop = Width >= 756;
+        LayoutState.SetDesktop(width >= 756);
+
         ResetUI();
         InvokeAsync(() =>
         {
             ResetUI();
             StateHasChanged();
         });
+    }
+
+    protected override void OnInitialized()
+    {
+        LayoutState.OnChange += Refresh;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -66,6 +74,12 @@
     public void Dispose()
     {
         _objRef?.Dispose();
+        LayoutState.OnChange -= Refresh;
+    }
+
+    private async void Refresh()
+    {
+        await InvokeAsync(StateHasChanged);
     }
 
     private void OnOpenChanged(bool value)
