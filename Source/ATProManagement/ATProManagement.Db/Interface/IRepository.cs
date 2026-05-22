@@ -26,5 +26,7 @@ namespace ATProManagement.Db
         Task InsertRange(params T[] entity);
 
         Task Remove(T entity, bool commit = true);
+
+        Task RemoveRange(params T[] entities);
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using ATProManagement.Db;
+using System.ComponentModel.DataAnnotations;
 
 namespace ATProManagement.Service
 {
@@ -11,6 +12,8 @@ namespace ATProManagement.Service
 
         public string? UserCreated { get; set; }
         public string? UserModified { get; set; }
+
+        [Required]
         public string? Name { get; set; }
 
         public string? Description { get; set; }

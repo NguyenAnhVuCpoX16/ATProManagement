@@ -112,5 +112,24 @@ namespace ATProManagement.Service
                 return (ex.Message);
             }
         }
+
+        [HttpPost]
+        [Produces("application/json")]
+        public async Task<Result> RemoveRange(List<EntityCourse> list)
+        {
+            try
+            {
+                using(var db = _ctx.ConnectDb())
+                {
+                    await db.Repo<EntityCourse>().RemoveRange(list.ToArray());
+                    await db.SaveChangesAsync();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }

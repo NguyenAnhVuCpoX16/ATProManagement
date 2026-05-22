@@ -4,198 +4,6 @@
 @inject ISweetAlertService _swal
 @inject IDialogService Dialog
 @inject IJSRuntime js
-<MudContainer MaxWidth="MaxWidth.False" Class="course-page">
-    <!-- HEADER -->
-    <Toolbar Title="Courses" OnRefresh="LoadData" OnExcelExport="ExportExcel" OnPdfExport="ExportPDF"/>
-    <!-- STATS -->
-    <MudGrid Class="mb-4">
-        <MudItem xs="12" sm="6" md="3">
-            <MudCard Class="stat-card orange-gradient">
-                <MudCardContent>
-                    <MudText Typo="Typo.subtitle2">
-                        Total Courses
-                    </MudText>
-                    <MudText Typo="Typo.h4" Class="fw-bold">
-                        @(_courses?.Count ?? 0)
-                    </MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="3">
-
-            <MudCard Class="stat-card">
-
-                <MudCardContent>
-                    <MudText Typo="Typo.subtitle2">
-                        Active
-                    </MudText>
-                    <MudText Typo="Typo.h4" Class="fw-bold">
-                        18
-                    </MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="3">
-            <MudCard Class="stat-card">
-                <MudCardContent>
-                    <MudText Typo="Typo.subtitle2">
-                        Students
-                    </MudText>
-                    <MudText Typo="Typo.h4" Class="fw-bold">
-                        1,240
-                    </MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="3">
-            <MudCard Class="stat-card">
-                <MudCardContent>
-                    <MudText Typo="Typo.subtitle2">
-                        Completed
-                    </MudText>
-                    <MudText Typo="Typo.h4" Class="fw-bold">
-                        320
-                    </MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-    </MudGrid>
-
-    <!-- TABLE -->
-    <MudPaper Class="table-wrapper pa-4">
-
-        <div class="d-flex justify-space-between align-center mb-4 flex-wrap gap-4">
-
-            <MudText Typo="Typo.h6">
-                Course List
-            </MudText>
-
-            <MudTextField T="string"
-                          Immediate="true"
-                          Placeholder="Search course..."
-                          Adornment="Adornment.Start"
-                          AdornmentIcon="@Icons.Material.Filled.Search"
-                          Class="search-box"
-                          ValueChanged="OnSearchChanged" />
-
-        </div>
-        @if (_courses?.Count > 0)
-        {
-            <div class="table-scroll">
-
-                <MudTable Items="_courses"
-                          RowsPerPage="25"
-                          Hover="true"
-                          Dense="true"
-                          Striped="true"
-                          Breakpoint="Breakpoint.Sm"
-                          Class="custom-table">
-                    <HeaderContent>
-                        <MudTh>Course Name</MudTh>
-                        <MudTh>Description</MudTh>
-                        <MudTh>Created</MudTh>
-                        <MudTh>User Created</MudTh>
-                        <MudTh>User Modified</MudTh>
-                        <MudTh Class="text-center">Actions</MudTh>
-                    </HeaderContent>
-                    <RowTemplate>
-                        <MudTd>
-                            <div class="d-flex align-center gap-2">
-                                <MudAvatar Class="course-avatar">
-                                    <MudIcon Icon="@Icons.Material.Filled.MenuBook" />
-                                </MudAvatar>
-                                <div>
-                                    <MudText Typo="Typo.body1" Class="course-name">
-                                        @context.Name
-                                    </MudText>
-                                    <MudText Typo="Typo.caption" Class="course-name">
-                                        @context.Guid
-                                    </MudText>
-                                </div>
-                            </div>
-                        </MudTd>
-                        <MudTd>
-                            @context.Description
-                        </MudTd>
-                        <MudTd>
-                            @context.TimeCreated.ToString("dd/MM/yyyy")
-                        </MudTd>
-                        <MudTd>
-                            @context.UserCreated
-                        </MudTd>
-                        <MudTd>
-                            @context.UserModified
-                        </MudTd>
-                        <MudTd Class="text-center">
-                            <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                                           Color="Color.Warning" Class="table-action"
-                                           OnClick=@(() => TableAction(context.Guid, "Edit")) />
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                           Color="Color.Error" Class="table-action"
-                                           OnClick=@(() => TableAction(context.Guid, "Delete")) />
-                        </MudTd>
-                    </RowTemplate>
-                    <PagerContent>
-                        <MudTablePager />
-                    </PagerContent>
-                </MudTable>
-            </div>
-        }
-    </MudPaper>
-</MudContainer>
-@{
-     content = @<MudGrid Spacing="3" Class="mt-2">
-        <MudItem xs="12" sm="6">
-            <MudTextField @bind-Value="model.Guid"
-                          Label="Guid"
-                          Class="input-field" ReadOnly Disabled/>
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <MudTextField @bind-Value="model.Name"
-                          Label="Course Name"
-                          Class="input-field" />
-        </MudItem>
-        <MudItem xs="12" sm="12">
-            <MudTextField @bind-Value="model.Description"
-                          Label="Description"
-                          Class="input-field" />
-        </MudItem>
-        <MudItem xs="6" sm="6">
-            <MudTextField @bind-Value="model.UserCreated"
-                          Label="User Created"
-                          Class="input-field" ReadOnly Disabled/>
-        </MudItem>
-        <MudItem xs="6" sm="6">
-            <MudTextField @bind-Value="model.UserModified"
-                          Label="User Modified"
-                          Class="input-field" ReadOnly Disabled/>
-        </MudItem>
-        <MudItem xs="6" sm="6">
-            <MudTextField @bind-Value="model.TimeCreated"
-                          Label="Time"
-                          Class="input-field" ReadOnly Disabled/>
-        </MudItem>
-        <MudItem xs="6" sm="6">
-            <MudTextField @bind-Value="model.TimeModified"
-                          Label="Time Modified  "
-                          Class="input-field" ReadOnly Disabled/>
-        </MudItem>
-    </MudGrid>;
-    footer = @<div>
-    <MudButton Color="Color.Secondary"
-                         Variant="Variant.Filled"
-                         StartIcon="@Icons.Material.Filled.Close"
-                       Class="btn-cancel"
-                       OnClick="DialogCancel">Cancel</MudButton>
-    <MudButton
-           StartIcon = "@Icons.Material.Filled.Save"
-           Variant = "Variant.Filled"
-           Color = "Color.Primary"
-           OnClick="Save"
-           Class = "btn-save">Save
-        </MudButton>
-    </div>;
-}
 <style>
     .custom-table {
         display: flex;
@@ -397,9 +205,213 @@
                 padding-bottom: 12px;
             }
     }
-</style>
 
+    .mud-ripple-checkbox svg{
+        fill: #01579B !important;
+    }
+</style>
+<MudContainer MaxWidth="MaxWidth.False" Class="course-page">
+    <!-- HEADER -->
+    <Toolbar Title="Courses" OnRefresh="LoadData" OnExcelExport="ExportExcel" OnPdfExport="ExportPDF"/>
+    <!-- STATS -->
+    <MudGrid Class="mb-4">
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Class="stat-card orange-gradient">
+                <MudCardContent>
+                    <MudText Typo="Typo.subtitle2">
+                        Total Courses
+                    </MudText>
+                    <MudText Typo="Typo.h4" Class="fw-bold">
+                        @(_courses?.Count ?? 0)
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+
+            <MudCard Class="stat-card">
+
+                <MudCardContent>
+                    <MudText Typo="Typo.subtitle2">
+                        Active
+                    </MudText>
+                    <MudText Typo="Typo.h4" Class="fw-bold">
+                        18
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Class="stat-card">
+                <MudCardContent>
+                    <MudText Typo="Typo.subtitle2">
+                        Students
+                    </MudText>
+                    <MudText Typo="Typo.h4" Class="fw-bold">
+                        1,240
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Class="stat-card">
+                <MudCardContent>
+                    <MudText Typo="Typo.subtitle2">
+                        Completed
+                    </MudText>
+                    <MudText Typo="Typo.h4" Class="fw-bold">
+                        320
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <!-- TABLE -->
+    <MudPaper Class="table-wrapper pa-4">
+
+        <div class="d-flex justify-space-between align-center mb-4 flex-wrap gap-4">
+
+            <MudText Typo="Typo.h6">
+                Course List
+            </MudText>
+
+            <MudTextField T="string"
+                          Immediate="true"
+                          Placeholder="Search course..."
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          Class="search-box"
+                          ValueChanged="OnSearchChanged" />
+            <MudButtonGroup Color="Color.Secondary" Variant="Variant.Filled">
+                <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddNew"></MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="DeleteRange"></MudIconButton>
+            </MudButtonGroup>
+        </div>
+        @if (_courses?.Count > 0)
+        {
+            <div class="table-scroll">
+
+                <MudTable 
+                          T="EntityCourse"
+                          @bind-SelectedItems="_selectedCourses"
+                          MultiSelection="true"
+                          Items="_courses"
+                          RowsPerPage="25"
+                          Hover="true"
+                          Dense="true"
+                          Striped="true"
+                          Breakpoint="Breakpoint.Sm"
+                          Class="custom-table">
+                    <HeaderContent>
+                        <MudTh>Course Name</MudTh>
+                        <MudTh>Description</MudTh>
+                        <MudTh>Created</MudTh>
+                        <MudTh>User Created</MudTh>
+                        <MudTh>User Modified</MudTh>
+                        <MudTh Class="text-center">Actions</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>
+                            <div class="d-flex align-center gap-2">
+                                <MudAvatar Class="course-avatar">
+                                    <MudIcon Icon="@Icons.Material.Filled.MenuBook" />
+                                </MudAvatar>
+                                <div>
+                                    <MudText Typo="Typo.body1" Class="course-name">
+                                        @context.Name
+                                    </MudText>
+                                    <MudText Typo="Typo.caption" Class="course-name">
+                                        @context.Guid
+                                    </MudText>
+                                </div>
+                            </div>
+                        </MudTd>
+                        <MudTd>
+                            @context.Description
+                        </MudTd>
+                        <MudTd>
+                            @context.TimeCreated.ToString("dd/MM/yyyy")
+                        </MudTd>
+                        <MudTd>
+                            @context.UserCreated
+                        </MudTd>
+                        <MudTd>
+                            @context.UserModified
+                        </MudTd>
+                        <MudTd Class="text-center">
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                           Color="Color.Warning" Class="table-action"
+                                           OnClick=@(() => TableAction(context.Guid, "Edit")) />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                           Color="Color.Error" Class="table-action"
+                                           OnClick=@(() => TableAction(context.Guid, "Delete")) />
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager />
+                    </PagerContent>
+                </MudTable>
+            </div>
+        }
+    </MudPaper>
+</MudContainer>
+@{
+     content = @<MudGrid Spacing="3" Class="mt-2">
+        <MudItem xs="12" sm="6">
+            <MudTextField @bind-Value="model.Guid"
+                          Label="Guid"
+                          Class="input-field" ReadOnly Disabled/>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField @bind-Value="model.Name"
+                          Label="Course Name"
+                          Class="input-field" 
+                          Required/>
+        </MudItem>
+        <MudItem xs="12" sm="12">
+            <MudTextField @bind-Value="model.Description"
+                          Label="Description"
+                          Class="input-field" />
+        </MudItem>
+        <MudItem xs="6" sm="6">
+            <MudTextField @bind-Value="model.UserCreated"
+                          Label="User Created"
+                          Class="input-field" ReadOnly Disabled/>
+        </MudItem>
+        <MudItem xs="6" sm="6">
+            <MudTextField @bind-Value="model.UserModified"
+                          Label="User Modified"
+                          Class="input-field" ReadOnly Disabled/>
+        </MudItem>
+        <MudItem xs="6" sm="6">
+            <MudTextField @bind-Value="model.TimeCreated"
+                          Label="Time"
+                          Class="input-field" ReadOnly Disabled/>
+        </MudItem>
+        <MudItem xs="6" sm="6">
+            <MudTextField @bind-Value="model.TimeModified"
+                          Label="Time Modified  "
+                          Class="input-field" ReadOnly Disabled/>
+        </MudItem>
+    </MudGrid>;
+    footer = @<div>
+    <MudButton Color="Color.Secondary"
+                         Variant="Variant.Filled"
+                         StartIcon="@Icons.Material.Filled.Close"
+                       Class="btn-cancel"
+                       OnClick="DialogCancel">Cancel</MudButton>
+    <MudButton
+           StartIcon = "@Icons.Material.Filled.Save"
+           Variant = "Variant.Filled"
+           Color = "Color.Primary"
+           OnClick="Save"
+           Class = "btn-save">Save
+        </MudButton>
+    </div>;
+}
 @code {
+    private HashSet<EntityCourse> _selectedCourses = new();
     RenderFragment content;
     RenderFragment footer;
     ICourseService? service;
@@ -465,6 +477,17 @@
         }
     }
 
+    private async Task AddNew()
+    {
+        try{
+            model = new();
+            await Edit(new Guid());
+        }catch(Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
+    }
+
     private async Task Edit(Guid guid)
     {
         try
@@ -506,6 +529,35 @@
         {
             await _swal.Error(respone.Message);
         }
+    }
+
+    private async Task DeleteRange()
+    {
+        try{
+            if (!_selectedCourses.Any())
+            {
+                await _swal.Warning("Please select at least one course to delete.");
+                return;
+            }
+
+            var result = await _swal.Confirm($"Confirm delete {_selectedCourses.Count} selected items?", "Delete");
+            if (result == false) return;
+
+            var respone = await service.RemoveRange(_selectedCourses.ToList());
+            if (respone.Success)
+            {
+                await _swal.Success("Delete Successfully");
+                await LoadData();
+            }
+            else
+            {
+                await _swal.Error(respone.Message);
+            }
+        }catch(Exception ex){
+            await _swal.Error(ex.Message);
+        }
+
+       
     }
 
     private async Task Save()

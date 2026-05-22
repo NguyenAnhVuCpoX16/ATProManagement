@@ -15,5 +15,8 @@ namespace ATProManagement.Core
 
         [Post(nameof(Delete))]
         Task<Result> Delete(Guid guid);
+
+        [Post(nameof(RemoveRange))]
+        Task<Result> RemoveRange(List<EntityCourse> list);
     }
 }

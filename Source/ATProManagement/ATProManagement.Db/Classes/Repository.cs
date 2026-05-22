@@ -106,5 +106,11 @@ namespace ATProManagement.Db
             DbSet.AddRange(entities);
             await _db.SaveChangesAsync();
         }
+
+        public virtual async Task RemoveRange(params T[] entities)
+        {
+            DbSet.RemoveRange(entities);
+            await _db.SaveChangesAsync();
+        }
     }
 }
