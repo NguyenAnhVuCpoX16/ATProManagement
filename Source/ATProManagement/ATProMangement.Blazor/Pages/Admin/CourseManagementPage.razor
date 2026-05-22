@@ -477,7 +477,6 @@
             model = _dataSource?.FirstOrDefault(x => x.Guid == guid)?.ToModel<ModelCourse>() ?? new ModelCourse();
             var parameters = new DialogParameters
             {
-                ["Model"] = model,
                 ["Title"] = $"{title}|Fill automatically",
                 ["ChildContent"] = content,
                 ["ChildFooter"] = footer

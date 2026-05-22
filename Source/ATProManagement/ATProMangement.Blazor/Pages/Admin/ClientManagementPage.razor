@@ -331,7 +331,7 @@
                             <MudTh>Course</MudTh>
                             <MudTh>Phone</MudTh>
                             <MudTh>Date</MudTh>
-                            <MudTh>Actions</MudTh>
+                            <MudTh Class="text-center">Actions</MudTh>
                         </HeaderContent>
                         <RowTemplate>
                             <MudTd>
@@ -371,18 +371,13 @@
                             <MudTd>
                                 @context.TimeCreated.ToString("dd/MM/yyyy")
                             </MudTd>
-                            <MudTd>
-                                <MudIconButton Icon="@Icons.Material.Filled.Visibility"
-                                               Size="Size.Small"
-                                               Class="action-btn" />
+                            <MudTd Class="text-center">
                                 <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                                               Color="Color.Success"
-                                               Size="Size.Small"
-                                               Class="action-btn" />
+                                               Color="Color.Warning" Class="table-action"
+                                               OnClick=@(() => TableAction(context, "Edit")) />
                                 <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                               Size="Size.Small"
-                                               Color="Color.Error"
-                                               Class="action-btn" />
+                                               Color="Color.Error" Class="table-action"
+                                               OnClick=@(() => TableAction(context, "Delete")) />
                             </MudTd>
                         </RowTemplate>
                         <PagerContent>
@@ -394,6 +389,69 @@
         </MudItem>
     </MudGrid>
 </MudContainer>
+@{
+    content =@<MudGrid>
+        <MudItem xs="12" sm="12">
+            <MudTextField @bind-Value="_model.Guid"
+                          Label="Guid"
+                          Class="input-field" ReadOnly Disabled />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField @bind-Value="_model.Name"
+                          Label="Name"
+                          Class="input-field"
+                          for="@(()=>_model.Name)" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField @bind-Value="_model.Email"
+                          Label="Email"
+                          Class="input-field" 
+                          InputType="InputType.Email"
+                          for="@(()=>_model.Email)"/>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudTextField @bind-Value="_model.Phone"
+                          Label="Phone"
+                          Class="input-field" 
+                          InputType="InputType.Telephone"
+                          For="@(()=>_model.Phone)"/>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+              <MudSelect T="Guid"
+                         Variant="Variant.Text"
+                         Placeholder="Search Courses"
+                         Value="_model.GuidCourse"
+                         Text="@_model.CourseName"
+                         ValueChanged="OnCourseChanged"
+                         Label="Courses">
+                @foreach (var item in OptionItem.Items){
+                    <MudSelectItem Value="@(Guid.Parse(item.Value))">@item.Text</MudSelectItem>
+                }
+              </MudSelect>
+        </MudItem>
+        <MudItem xs="12" sm="12">
+            <MudTextField @bind-Value="_model.Message"
+                          Label="Message"
+                          Class="input-field" 
+                          Lines="3"/>
+        </MudItem>
+    </MudGrid>;
+    footer = @<div>
+        <MudButton Color="Color.Secondary"
+                   Variant="Variant.Filled"
+                   StartIcon="@Icons.Material.Filled.Close"
+                   Class="btn-cancel"
+                   OnClick="DialogCancel">Cancel</MudButton>
+        <MudButton StartIcon="@Icons.Material.Filled.Save"
+                   Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="Save"
+                   Class="btn-save">
+            Save
+        </MudButton>
+    </div>;
+}
+
 
 @code {
     RenderFragment content;
@@ -404,16 +462,17 @@
     List<EntityClient>? _clients;
     IClientService service;
     private List<string> _course;
-    ModelClient model = new();
+    ModelClient _model = new();
     private HashSet<EntityClient> _selectedsClients = new();
-
+    private IDialogReference? _dialog;
+    ResultsOf<ATPromanagement.Base.OptionItem<string>> OptionItem;
 
     protected override async Task OnInitializedAsync()
     {
         await _swal.Loading();
         service = _ctx.GetService<IClientService>();
         await LoadData();
-        var text = await service.GetCourseOptions();
+        OptionItem = await service.GetCourseOptions();
         await _swal.Close();
     }
 
@@ -478,7 +537,7 @@
         }
     }
 
-    
+
     async Task ExportToPDF()
     {
         try
@@ -498,8 +557,7 @@
     {
         try
         {
-            model = new();
-          
+            await Edit(new ModelClient(), "Add new Course");
         }
         catch (Exception ex)
         {
@@ -536,6 +594,114 @@
             await _swal.Error(ex.Message);
         }
 
-       
+
+    }
+
+
+    private async Task TableAction(EntityClient entity, string action)
+    {
+        switch (action)
+        {
+            case "Delete":
+                await Delete(entity.Guid);
+                break;
+            case "Edit":
+                await Edit(entity.ToModel<ModelClient>());
+                break;
+            default:
+                break;
+        }
+    }
+
+    private async Task Edit(ModelClient model, string title = "Edit Client")
+    {
+        try
+        {
+            _model = model;
+            var parameters = new DialogParameters
+            {
+                ["Title"] = $"{title}|Fill automatically",
+                ["ChildContent"] = content,
+                ["ChildFooter"] = footer
+            };
+            var options = new DialogOptions
+            {
+                MaxWidth = MaxWidth.Medium,
+                FullWidth = true,
+            };
+            _dialog = await Dialog.ShowAsync<BaseDialog>("", parameters, options);
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
+    }
+
+    private async Task Delete(Guid guid)
+    {
+        var result = await _swal.Confirm("Conrfirm delete item?", "Delete");
+        if (result == false) return;
+        var respone = await service.Delete(guid);
+        if (respone.Success)
+        {
+            await _swal.Success("Delete Successfully");
+            await LoadData();
+        }
+        else
+        {
+            await _swal.Error(respone.Message);
+        }
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            var result = await _swal.Confirm("Confirm save item?", "Save");
+            if (result)
+            {
+                await Submit(_model);
+            }
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
+    }
+
+    private void DialogCancel()
+    {
+        _dialog?.Close();
+    }
+
+    private async Task Submit(ModelClient model)
+    {
+        try
+        {
+            await _swal.Loading("Saving...");
+            var result = await service.Submit(model);
+            await _swal.Close();
+            if (result.Success)
+            {
+                await _swal.Success("Save Successfully");
+                DialogCancel();
+                await LoadData(); 
+            }
+            else await _swal.Error(result?.Message);
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
+    }
+
+    void OnCourseChanged(Guid guid)
+    {
+        _model?.GuidCourse = guid;
+
+        _model?.CourseName =
+            OptionItem.Items
+                .FirstOrDefault(x => x.Value == guid.ToString())
+                ?.Text;
     }
 }
