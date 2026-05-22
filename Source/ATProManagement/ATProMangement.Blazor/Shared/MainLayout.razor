@@ -40,6 +40,7 @@
     public void UpdateBrowserWidth(int width)
     {
         Width = width;
+        BaseStatic.IsDesktop = Width >= 756;
         ResetUI();
         InvokeAsync(() =>
         {

@@ -1,4 +1,5 @@
-﻿<MudGrid Class="dashboard-container">
+﻿@inject ISweetAlertService _swal
+<MudGrid Class="dashboard-container">
     <!-- HEADER -->
     <MudItem xs="12">
 
@@ -18,15 +19,10 @@
 
     <!-- STATS -->
     <MudItem xs="12" sm="6" md="3">
-
         <MudCard Class="dashboard-card revenue-card">
-
             <MudCardContent>
-
                 <div class="d-flex justify-space-between align-center">
-
                     <div>
-
                         <MudText Typo="Typo.subtitle2">
                             Revenue
                         </MudText>
@@ -494,6 +490,12 @@
 </style>
 
 @code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await _swal.Loading("Loading dashboard...");
+        await Task.Delay(5000).ContinueWith(_ => _swal.Close());
+    }
 
     private MudTheme _theme = new()
     {
