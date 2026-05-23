@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ATProManagement.Db.Entity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace ATProManagement.Db
 {
-    public class AppDbContext : DbContext, IDbContext
+    public class AppDbContext : IdentityDbContext<EntityUser>, IDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -44,6 +47,14 @@ namespace ATProManagement.Db
                 entity.Property(nameof(EntityBase.UserModified))
                       .HasColumnOrder(4);
             }
+            modelBuilder.Entity<IdentityRole>(entity =>
+            {
+                entity.Property(x => x.Name)
+                    .HasMaxLength(191);
+
+                entity.Property(x => x.NormalizedName)
+                    .HasMaxLength(191);
+            });
 
             modelBuilder.Entity<EntityCourse>()
                .Property(x => x.Name)

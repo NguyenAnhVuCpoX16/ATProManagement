@@ -1,12 +1,6 @@
 ﻿using ATProManagement.Base;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Microsoft.AspNetCore.Http;
 using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.Json;
-using System.Xml.Linq;
 
 namespace ATProManagement.Context
 {

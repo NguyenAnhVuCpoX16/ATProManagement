@@ -15,7 +15,8 @@ namespace ATProManagement.Abstract
 
         public void ConfigureServices(IServiceCollection services, IConfiguration config)
         {
-            services.AddScoped<IDbContext, AppDbContext>();
+            services.AddScoped<IDbContext>(provider =>provider.GetRequiredService<AppDbContext>());
+            services.AddScoped<IMyDbFactory, MyDbFactory>();
             services.AddScoped<IMyContext, MyContext>();
             services.AddScoped<IMainContext, MainContext>();
             BaseStatic.Register(services);

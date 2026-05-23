@@ -1,4 +1,5 @@
-﻿using ATProManagement.Db;
+﻿using ATProManagement.Base;
+using ATProManagement.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,30 +7,24 @@ namespace ATProManagement.Context
 {
     public class MyContext : IMyContext
     {
-        private readonly IDbContextFactory<AppDbContext> _factory;
         private readonly IDbContext _db;
-        public event Action<object[]> StateChanged;
         private readonly IServiceProvider _provider;
-        public MyContext(IDbContext db, IServiceProvider provider, IDbContextFactory<AppDbContext> dbFactory)
+        private readonly IMyDbFactory _factory;
+        public MyContext(IDbContext db, IServiceProvider provider, IMyDbFactory factory)
         {
             _db = db;
             _provider = provider;
-            _factory = dbFactory;
+            _factory = factory;
         }
 
         public IDbContext ConnectDb()
         {
-            return (IDbContext)_factory.CreateDbContext();
+            return _factory.CreateDbContext();
         }
 
         public T GetService<T>() 
         {
             return _provider.GetService<T>();
-        }
-
-        public void NotifyStateChanged(params object[] evt)
-        {
-            StateChanged?.Invoke(evt);
         }
     }
 }

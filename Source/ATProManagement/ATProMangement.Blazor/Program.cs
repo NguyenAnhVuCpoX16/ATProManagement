@@ -1,16 +1,19 @@
 using ATPromanagement.Abstract;
 using ATProManagement.Abstract;
 using ATProManagement.Base;
-using ATProManagement.Context;
 using ATProManagement.Db;
+using ATProManagement.Db.Entity;
 using CurrieTechnologies.Razor.SweetAlert2;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using MudBlazor.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -44,12 +47,47 @@ services.AddCors(options =>
     });
 });
 
-services.AddDbContextFactory<AppDbContext>(options =>
+services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
         configs.GetConnectionString("mysql"),
         ServerVersion.AutoDetect(configs.GetConnectionString("mysql"))
     )
 );
+
+services.AddIdentity<EntityUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
+services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
+
+
+
 var assemblies = AssembliesUtil.GetAspNetAssemblies();
 var aspnetModules = assemblies.GetInstances<IModuleAspNet>();
 foreach (var module in aspnetModules)
@@ -78,7 +116,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

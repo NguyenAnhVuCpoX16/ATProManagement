@@ -1,9 +1,7 @@
 ﻿using ATPromanagement.Base;
 using ATProManagement.Context;
 using ATProManagement.Db;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
@@ -69,8 +67,6 @@ namespace ATProManagement.Base
             }
         }
 
-        [HttpGet]
-        [Produces("application/json")]
         protected async Task<ResultsOf<OptionItem<string>>> GetCourseOptions()
         {
             try

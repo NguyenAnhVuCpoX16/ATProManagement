@@ -133,7 +133,7 @@
         var passwordReal = "zzzz";
         if (_passWord == passwordReal)
         {
-            await _ctx.SetCookie("Admin", _passWord);
+            await _ctx.SetCookie("Admin", true);
             _dialog.Close();
         }
         else
