@@ -63,7 +63,7 @@ namespace ATProManagement.Service
                     {
                         entity = model.SetValueModel();
                         await db.Repo<EntityCourse>().Insert(entity, commit: false);
-                       
+
                     }
                     else
                     {
@@ -88,13 +88,13 @@ namespace ATProManagement.Service
             try
             {
                 var list = new List<EntityCourse>();
-                for (int i = 1; i <= 5; i++)
+                foreach(var item in Courses)
                 {
                     list.Add(new EntityCourse
                     {
-                        Guid = Guid.NewGuid(),
-                        Name = $"Course {i}",
-                        Description = $"Description for Course {i}",
+                        Guid = item.Guid,
+                        Name = item.Name,
+                        Description = item.Description,
                         TimeCreated = DateTime.Now,
                         TimeModified = DateTime.Now,
                         UserCreated = "Admin",
@@ -119,7 +119,7 @@ namespace ATProManagement.Service
         {
             try
             {
-                using(var db = _ctx.ConnectDb())
+                using (var db = _ctx.ConnectDb())
                 {
                     await db.Repo<EntityCourse>().RemoveRange(list.ToArray());
                     await db.SaveChangesAsync();
@@ -131,5 +131,49 @@ namespace ATProManagement.Service
                 return ex.Message;
             }
         }
+
+        private List<CourseItem> Courses = new()
+    {
+        new()
+        {
+            Guid = Guid.NewGuid(),
+            Name = "Blazor",
+            Description = "Blazor Web Development"
+        },
+        new()
+        {
+            Guid = Guid.NewGuid(),
+            Name = "MAUI",
+            Description = ".NET MAUI Mobile App"
+        },
+        new()
+        {
+            Guid = Guid.NewGuid(),
+            Name = "ASP.NET",
+            Description = "ASP.NET Core API"
+        },
+
+         new()
+        {
+            Guid = Guid.NewGuid(),
+            Name = "Winform",
+            Description = "Winform Application"
+        },
+          new()
+        {
+            Guid = Guid.NewGuid(),
+            Name = "Angular",
+            Description = "Angular Frontend Framework"
+        }
+
+    };
+
+    }
+    public class CourseItem
+    {
+        public Guid Guid { get; set; }
+
+        public string Name { get; set; }
+        public string Description { get; set; } = string.Empty;
     }
 }

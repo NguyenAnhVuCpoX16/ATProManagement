@@ -76,7 +76,7 @@ namespace ATProManagement.Service
                         entity.Phone = model.Phone;
                         entity.Message = model.Message;
                         entity.CourseName = model.CourseName;
-                        entity.GuidCourse = model.GuidCourse;
+                        entity.GuidCourse = model.GuidCourse??Guid.Empty;
                         entity.TimeModified = DateTime.Now;
                     }
                     await db.SaveChangesAsync();

@@ -1,0 +1,341 @@
+﻿@page "/register-course"
+@using System.ComponentModel.DataAnnotations
+@layout EmptyLayout
+@inject IMainContext _ctx
+@inject ISweetAlertService _swal
+@inject IJSRuntime JS
+@inject NavigationManager _nav
+<PageTitle>Course Registration</PageTitle>
+<MudContainer MaxWidth="MaxWidth.False" Class="register-wrapper">
+    <!-- DECORATION -->
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+    <div class="bg-circle bg-circle-3"></div>
+    <div class="register-center">
+        <MudPaper Elevation="0" Class="register-card">
+            <!-- LEFT TOP -->
+            <div class="top-decoration"></div>
+            <!-- HEADER -->
+            <div class="register-header">
+                <MudAvatar
+                           Size="Size.Large"
+                           Class="register-avatar">
+                    <MudIcon Icon="@Icons.Material.Filled.School" Size="Size.Large" />
+                           </MudAvatar>
+                <MudText Typo="Typo.h4" Class="register-title">
+                    Register Course
+                </MudText>
+                <MudText Typo="Typo.body2" Class="register-subtitle">
+                    Start your learning journey today
+                </MudText>
+            </div>
+            <!-- FORM -->
+            <MudForm @ref="_form" Model="_model">
+                <MudGrid Spacing="2">
+                    <MudItem xs="12">
+                        <MudTextField T="string"
+                                      Label="Full Name"
+                                      Variant="Variant.Outlined"
+                                      For="@(() => _model.Name)"
+                                      @bind-Value="_model.Name"
+                                      Immediate="true"
+                                      Adornment="Adornment.Start"/>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField T="string"
+                                      Label="Email Address"
+                                      Variant="Variant.Outlined"
+                                      For="@(() => _model.Email)"
+                                      @bind-Value="_model.Email"
+                                      Immediate="true"
+                                      Adornment="Adornment.Start"/>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField T="string"
+                                      Label="Phone Number"
+                                      Variant="Variant.Outlined"
+                                      For="@(() => _model.Phone)"
+                                      @bind-Value="_model.Phone"
+                                      Immediate="true"
+                                      Adornment="Adornment.Start"/>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudSelect T="Guid?"
+                                   Label="Select Course"
+                                   Variant="Variant.Outlined"
+                                   For="@(() => _model.GuidCourse)"
+                                   @bind-Value="_model.GuidCourse"
+                                   Placeholder="Select course">
+                            @if(OptionItem?.Items?.Any() == true)
+                            {
+                                foreach (var item in OptionItem.Items)
+                                {
+                                    <MudSelectItem Value="@(Guid.TryParse(item.Value, out var g) ? g : (Guid?)null)">
+                                        @item.Text
+                                    </MudSelectItem>
+                                }
+                            }
+                            
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField T="string"
+                                      Label="Message"
+                                      Variant="Variant.Outlined"
+                                      Lines="4"
+                                      @bind-Value="_model.Message"
+                                      Adornment="Adornment.Start"/>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudButton FullWidth="true"
+                                   Variant="Variant.Filled"
+                                   Size="Size.Large"
+                                   OnClick="Submit"
+                                   Class="register-button">
+                            <MudIcon Icon="@Icons.Material.Filled.Send" Class="me-2" />
+                            Register Now
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
+        </MudPaper>
+    </div>
+</MudContainer>
+
+<style>
+
+    .register-wrapper {
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient( 145deg, #FFF1E6 0%, #FFD8A8 16%, #FFB347 38%, #FF9800 60%, #FF6F00 82%, #E65100 100%);
+    }
+        .register-wrapper::before {
+            content: "";
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
+            top: -180px;
+            right: -120px;
+            filter: blur(30px);
+        }
+
+        .register-wrapper::after {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            background: radial-gradient(circle, rgba(255,255,255,.12), transparent 70%);
+            bottom: -180px;
+            left: -120px;
+            filter: blur(40px);
+        }
+
+    .register-center {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 24px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 460px;
+        padding: 38px 34px;
+        border-radius: 30px;
+        position: relative;
+        background: rgba(255,255,255,0.96);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 15px 45px rgba(0,0,0,0.16), 0 4px 12px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .top-decoration {
+        position: absolute;
+        top: -120px;
+        right: -120px;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        background: linear-gradient( 135deg, rgba(255,111,0,0.18), rgba(255,167,38,0.05));
+    }
+
+    .register-header {
+        text-align: center;
+        margin-bottom: 28px;
+        position: relative;
+        z-index: 5;
+    }
+
+    .register-avatar {
+        width: 78px !important;
+        height: 78px !important;
+        margin: auto;
+        background: linear-gradient( 135deg, #FF6F00, #FFA726) !important;
+        color: white !important;
+        box-shadow: 0 10px 24px rgba(255,111,0,0.35);
+    }
+
+    .register-title {
+        margin-top: 18px;
+        font-weight: 800;
+        color: #1F2937;
+    }
+
+    .register-subtitle {
+        margin-top: 6px;
+        color: #6B7280;
+    }
+
+    .modern-input {
+        margin-top: 4px;
+    }
+
+        .modern-input .mud-input-control {
+            border-radius: 18px;
+        }
+
+        .modern-input .mud-input-slot {
+            font-size: 15px;
+        }
+
+        .modern-input .mud-input-root {
+            border-radius: 18px !important;
+            background: #fff;
+            transition: .25s;
+        }
+
+            .modern-input .mud-input-root:hover {
+                transform: translateY(-1px);
+            }
+
+        .modern-input .mud-input-adornment {
+            color: #FF6F00 !important;
+        }
+
+        .modern-input .mud-input-label {
+            font-weight: 500;
+        }
+
+    .register-button {
+        height: 56px;
+        margin-top: 8px;
+        border-radius: 18px !important;
+        font-size: 15px;
+        font-weight: 700;
+        background: linear-gradient( 135deg, #FF6F00 0%, #FF9800 100%) !important;
+        box-shadow: 0 12px 28px rgba(255,111,0,0.35);
+        transition: all .25s ease;
+        color: #fff;
+    }
+
+        .register-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 32px rgba(255,111,0,0.45);
+        }
+
+    .bg-circle {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(10px);
+        opacity: .18;
+    }
+
+    .bg-circle-1 {
+        width: 280px;
+        height: 280px;
+        background: white;
+        top: -80px;
+        left: -80px;
+    }
+
+    .bg-circle-2 {
+        width: 220px;
+        height: 220px;
+        background: #FFE0B2;
+        bottom: -60px;
+        right: -60px;
+    }
+
+    .bg-circle-3 {
+        width: 140px;
+        height: 140px;
+        background: white;
+        top: 20%;
+        right: 10%;
+    }
+
+    @@media(max-width: 600px) {
+
+        .register-card {
+            padding: 28px 22px;
+            border-radius: 24px;
+            max-width: 100%;
+        }
+
+        .register-title {
+            font-size: 28px !important;
+        }
+    }
+
+</style>
+
+@code {
+    private MudForm? _form;
+    private ModelClient _model = new();
+    IClientService _svc;
+    ResultsOf<ATPromanagement.Base.OptionItem<string>> OptionItem;
+    protected override async Task OnInitializedAsync()
+    {
+        await _swal.Loading();
+        _svc = _ctx.GetService<IClientService>();
+        await LoadData();
+        await _swal.Close();
+    }
+
+    private async Task LoadData()
+    {
+        OptionItem = await _svc.GetCourseOptions();
+    }
+
+    private async Task Submit()
+    {
+        try
+        {
+            await _form!.Validate();
+
+            if (!_form.IsValid)
+                return;
+            var course = OptionItem.Items.FirstOrDefault(x => x.Value == _model.GuidCourse.ToString());
+            if (course is not null)
+            {
+                _model.CourseName = course.Text;
+            }
+            await _swal.Loading("Saving...");
+            var result = await _svc.Submit(_model);
+            await _swal.Close();
+            if (result.Success)
+            {
+                await _swal.Success("Registration completed successfully! We’ll get in touch with you shortly.");
+                
+                _nav.NavigateTo(_nav.Uri,true);
+            }
+            else
+            {
+                await _swal.Error("Course registration failed. Please try again later.");
+            }
+        }
+        catch (Exception ex)
+        {
+            await _swal.Error(ex.Message);
+        }
+       
+    }
+}
