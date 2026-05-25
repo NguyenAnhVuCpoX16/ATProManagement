@@ -7,6 +7,9 @@
 @implements IDisposable
 @inject ISweetAlertService _swal
 @inject IDialogService Dialog
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Nav
+
 <MudThemeProvider />
 <MudPopoverProvider />
 <MudDialogProvider />
@@ -14,53 +17,34 @@
 <MudLayout>
     <AppBar Open="_open" OpenChanged="OnOpenChanged" />
     <MudDrawer @bind-Open="_open"
-    Elevation="1"
-    Fixed="true"
-    Variant="variant"
-    OpenMiniOnHover="true"
-    Breakpoint="Breakpoint.None"
-    ClipMode="DrawerClipMode.Always"
-    Class="sidebar">
+               Elevation="1"
+               Fixed="true"
+               Variant="variant"
+               OpenMiniOnHover="true"
+               Breakpoint="Breakpoint.None"
+               ClipMode="DrawerClipMode.Always"
+               Class="sidebar">
         <MudNavMenu>
             <NavMenu />
         </MudNavMenu>
     </MudDrawer>
-    @if(_layoutReady){
+    @if (_layoutReady)
+    {
         <MudMainContent>
             @Body
         </MudMainContent>
     }
-    </MudLayout>
-@{
-    content = @<MudTextField @bind-Value="_passWord"
-                             T="string"
-                             InputType="InputType.Password"
-                             Placeholder="Nhập mã bí mật..."
-                             Label="Password"
-                             OnKeyDown="Password_Keydown">
-            </MudTextField>        
-    ;
-    footer = @<MudButton Color="Color.Secondary" 
-                         Variant="Variant.Filled"
-                         StartIcon="@Icons.Material.Filled.Check"
-                         OnClick="ConfirmPassword">
-                         Confirm
-            </MudButton>        
-    ;
-}
-
+</MudLayout>
 @code {
-    RenderFragment content;
-    RenderFragment footer;
     private int Width;
     private bool _open = false;
     DrawerVariant variant => Width < 756
             ? DrawerVariant.Responsive
             : DrawerVariant.Mini;
     private DotNetObjectReference<MainLayout>? _objRef;
-    private IDialogReference? _dialog;
     private bool _layoutReady;
-    private string _passWord;
+    private bool _isAuthenticated = false;
+    private bool _disposed;
 
     [JSInvokable]
     public void UpdateBrowserWidth(int width)
@@ -79,43 +63,52 @@
     protected override async Task OnInitializedAsync()
     {
         LayoutState.OnChange += Refresh;
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        _isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+
+        if (!_isAuthenticated)
+        {
+            Nav.NavigateTo("/login", true);
+        }
     }
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (!firstRender || _disposed)
+            return;
+        try
         {
-            _layoutReady = true;
-            _objRef = DotNetObjectReference.Create(this);
-            await JS.InvokeVoidAsync(
-                "browserSize.registerResizeCallback",
-                _objRef
-            );
-            if(!await _ctx.ExistCookie("Admin"))
+            if (firstRender)
             {
-                var parameters = new DialogParameters
-                {
-                    ["Title"] = $"Hello, Admin! Confirm your password to continue.|Fill automatically",
-                    ["ChildContent"] = content,
-                    ["ChildFooter"] = footer
-                };
-                var options = new DialogOptions
-                {
-                    MaxWidth = MaxWidth.Medium,
-                    FullWidth = true,
-                    CloseOnEscapeKey = false,
-                    BackdropClick = false
-                };
-                _dialog = await Dialog.ShowAsync<BaseDialog>("", parameters, options);
+                _layoutReady = true;
+                _objRef = DotNetObjectReference.Create(this);
+                await JS.InvokeVoidAsync(
+                    "browserSize.registerResizeCallback",
+                    _objRef
+                );
             }
         }
+        catch (TaskCanceledException)
+        {
+            // Ignore
+        }
+        catch (JSDisconnectedException)
+        {
+            // Blazor Server disconnect
+        }
+        catch (ObjectDisposedException)
+        {
+            // Component disposed
+        }
+
     }
 
     public void Dispose()
     {
         _objRef?.Dispose();
         LayoutState.OnChange -= Refresh;
+        _objRef?.Dispose();
     }
 
     private async void Refresh()
@@ -128,32 +121,10 @@
         _open = value;
     }
 
-    private async Task ConfirmPassword()
-    {
-        var passwordReal = "zzzz";
-        if (_passWord == passwordReal)
-        {
-            await _ctx.SetCookie("Admin", true);
-            _dialog.Close();
-        }
-        else
-        {
-            await _swal.Error("Sai mất rồi!");
-        }
-    }
-
     private void ResetUI()
     {
         _open = true;
         StateHasChanged();
         _open = false;
-    }
-
-    private async Task Password_Keydown(KeyboardEventArgs args)
-    {
-        if(args.Key == "Enter")
-        {
-            await ConfirmPassword();
-        }
     }
 }

@@ -17,6 +17,7 @@ namespace ATProManagement.Abstract
         {
             services.AddScoped<IDbContext>(provider =>provider.GetRequiredService<AppDbContext>());
             services.AddScoped<IMyDbFactory, MyDbFactory>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IMyContext, MyContext>();
             services.AddScoped<IMainContext, MainContext>();
             BaseStatic.Register(services);

@@ -3,9 +3,12 @@ using ATProManagement.Abstract;
 using ATProManagement.Base;
 using ATProManagement.Db;
 using ATProManagement.Db.Entity;
+using ATProMangement.Blazor;
+using Blazored.LocalStorage;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using MudBlazor.Services;
+using System;
+using System.Net.Http;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +32,16 @@ services.AddMudServices();
 services.AddServerSideBlazor();
 services.AddRazorPages();
 services.AddSweetAlert2();
+services.AddBlazoredLocalStorage();
+services.AddHttpClient();
+services.AddAuthorizationCore();
+services.AddScoped(sp =>
+{
+    return new HttpClient
+    {
+        BaseAddress = new Uri("http://localhost:5066/")
+    };
+});
 services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -86,8 +101,6 @@ services.AddAuthentication(options =>
     };
 });
 
-
-
 var assemblies = AssembliesUtil.GetAspNetAssemblies();
 var aspnetModules = assemblies.GetInstances<IModuleAspNet>();
 foreach (var module in aspnetModules)
@@ -95,6 +108,8 @@ foreach (var module in aspnetModules)
     module.ConfigureServices(services, configs);
 }
 services.AddScoped<ISweetAlertService, ATProMangement.Blazor.SweetAlertService>();
+services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+
 var app = builder.Build();
 app.UseCors("AllowAll");
 app.UseDefaultFiles();

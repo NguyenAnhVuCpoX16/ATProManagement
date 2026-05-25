@@ -1,4 +1,7 @@
-﻿<MudPaper Width="250px" Elevation="0">
+﻿@inject Blazored.LocalStorage.ILocalStorageService Storage
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Nav
+<MudPaper Width="250px" Elevation="0">
     <MudNavMenu>
         <MudNavLink Href="/" Icon="@Icons.Material.Filled.Dashboard" IconColor="Color.Surface" Match="NavLinkMatch.All" Class="text-white custom-nav-link">
             Dashboard
@@ -8,11 +11,21 @@
             <MudNavLink Href="/admin/clients" Icon="@Icons.Material.Filled.SupervisedUserCircle" IconColor="Color.Surface" Class="text-white custom-nav-link">Client</MudNavLink>
         </MudNavGroup>
         <MudNavLink Href="/x" Icon="@Icons.Material.Filled.Language" IconColor="Color.Surface" Class="text-white custom-nav-link">Servers</MudNavLink>
+        <MudNavLink Href="/register-course" Icon="@Icons.Material.Filled.AppRegistration" IconColor="Color.Surface" Class="text-white custom-nav-link">Servers</MudNavLink>
         <MudNavLink Href="/x" Icon="@Icons.Material.Filled.Settings" IconColor="Color.Surface" Class="text-white custom-nav-link">Settings</MudNavLink>
         <MudNavLink Href="/x" Icon="@Icons.Material.Filled.QuestionAnswer" IconColor="Color.Surface" Class="text-white custom-nav-link">About</MudNavLink>
-        <MudNavLink Href="/x"  Icon="@Icons.Material.Filled.Logout" IconColor="Color.Surface" Class="text-white custom-nav-link">Log out</MudNavLink>
+        <MudNavLink OnClick="Logout"  Icon="@Icons.Material.Filled.Logout" IconColor="Color.Surface" Class="text-white custom-nav-link">Log out</MudNavLink>
     </MudNavMenu>
 </MudPaper>
+
+@code{
+    private async Task Logout()
+    {
+        await Storage.RemoveItemAsync("token");
+        ((CustomAuthStateProvider)AuthStateProvider).NotifyUserChanged();
+        Nav.NavigateTo("/login", true);
+    }
+}
 <style>
 
     aside.mud-drawer {

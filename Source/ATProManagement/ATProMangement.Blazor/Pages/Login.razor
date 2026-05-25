@@ -1,0 +1,162 @@
+﻿@page "/login"
+@using System.Net.Http.Json;
+@inject HttpClient Http
+@inject NavigationManager Nav
+@inject Blazored.LocalStorage.ILocalStorageService Storage
+@layout EmptyLayout
+@inject ISweetAlertService _swal
+<div class="login-wrapper">
+    <MudCard Class="login-card pa-6">
+        <div class="login-header">
+            <div class="logo">AT</div>
+            <MudText Typo="Typo.h5" Class="title">Welcome Back</MudText>
+            <MudText Typo="Typo.body2" Class="subtitle">
+                Sign in to continue
+            </MudText>
+        </div>
+
+        <MudTextField @bind-Value="model.Email"
+                      Label="Email"
+                      Variant="Variant.Outlined"
+                      Class="mt-4" 
+                      AdornmentColor="Color.Surface"
+                      />
+
+        <MudTextField @bind-Value="model.Password"
+                      Label="Password"
+                      InputType="InputType.Password"
+                      Variant="Variant.Outlined"
+                      Class="mt-3" />
+
+        <div class="options">
+            <MudCheckBox @bind-Checked="rememberMe" T="bool" Color="Color.Success">
+                Remember me
+            </MudCheckBox>
+        </div>
+
+        <MudButton Class="login-btn mt-4"
+                   FullWidth="true"
+                   OnClick="HandleLogin">
+            Login
+        </MudButton>
+
+        @if (!string.IsNullOrEmpty(error))
+        {
+            <MudText Color="Color.Error" Class="mt-3">@error</MudText>
+        }
+
+    </MudCard>
+
+</div>
+
+@code {
+    private LoginModel model = new();
+    private string? error;
+    private bool rememberMe = true;
+    private async Task HandleLogin()
+    {
+        await _swal.Loading("Please wait...");
+        var response = await Http.PostAsJsonAsync("/login", model);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            await _swal.Error("Login failed");
+            return;
+        }
+
+        var token = await response.Content.ReadAsStringAsync();
+
+        var authToken = new AuthToken
+        {
+            Token = token,
+            ExpireAt = DateTime.UtcNow.AddDays(1)
+        };
+
+        if (rememberMe)
+            await Storage.SetItemAsync("auth", authToken);
+        else
+            await Storage.SetItemAsync("auth", authToken);
+        await _swal.Close();
+        Nav.NavigateTo("/");
+    }
+
+    class LoginModel
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+}
+
+<style>
+    .login-wrapper {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(circle at top, rgba(0, 230, 118, 0.15), #0f0f0f 60%);
+    }
+
+    .login-card {
+        width: 380px;
+        border-radius: 18px !important;
+        background: rgba(20, 20, 20, 0.85) !important;
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(0, 230, 118, 0.25);
+        box-shadow: 0 10px 40px rgba(0, 230, 118, 0.15);
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .logo {
+        width: 55px;
+        height: 55px;
+        margin: 0 auto 10px;
+        border-radius: 12px;
+        background: #00E676;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        color: black;
+        font-size: 20px;
+        box-shadow: 0 0 20px rgba(0, 230, 118, 0.6);
+    }
+
+    .title {
+        color: white !important;
+        font-weight: 600;
+    }
+
+    .subtitle {
+        color: #aaa !important;
+    }
+
+    .options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 8px;
+    }
+
+    .login-btn {
+        background: #00E676 !important;
+        color: black !important;
+        font-weight: bold;
+        padding: 10px !important;
+        border-radius: 10px !important;
+        transition: 0.25s;
+        box-shadow: 0 6px 20px rgba(0, 230, 118, 0.3);
+    }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 230, 118, 0.5);
+        }
+
+    .mud-input-label, input{
+        color: #fff !important;
+    }
+</style>
