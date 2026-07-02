@@ -42,9 +42,9 @@ services.AddScoped(sp =>
         BaseAddress = new Uri("http://localhost:5066/")
     };
 });
-services.AddSwaggerGen(c =>
+services.AddSwaggerGen(options =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "ATProManagement",
         Version = "v1"
@@ -112,12 +112,13 @@ services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 
 var app = builder.Build();
 app.UseCors("AllowAll");
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseDefaultFiles();
 app.MapStaticAssets();
-app.MapControllers();
 
 // Configure the HTTP request pipeline.
-app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -130,9 +131,7 @@ app.UseSwaggerUI(c =>
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
+app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

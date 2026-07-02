@@ -1,5 +1,6 @@
 ﻿using ATProManagement.Base;
 using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace ATProMangement.Blazor.Controller
             _nav = nav;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
